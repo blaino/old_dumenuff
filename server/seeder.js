@@ -42,4 +42,22 @@ Meteor.startup(function() {
         timestamp: Date.now(),
         channel: 'general'
     });
+
+    Meteor.call('testRive', function () {
+        var RiveScript = Meteor.npmRequire('rivescript');
+        var rs = new RiveScript();
+
+        var reply = Async.runSync(function (done) {
+            rs.loadDirectory("/Users/blainenelson/projects/vk/lib/brain",
+                             function(batch_num) {
+                                 console.log('### loading');
+                                 rs.sortReplies();
+                                 var reply = rs.reply("local-user", "Hello, bot!");
+                                 console.log("The bot says: " + reply);
+                                 done(null, reply);
+                             });
+        });
+
+        return reply.result;
+    });
 });

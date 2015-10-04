@@ -1,7 +1,11 @@
 Meteor.methods({
-  newMessage: function (message) {
+    newMessage: function (message) {
   	message.timestamp = Date.now();
-    message.user = Meteor.userId();
-    Messages.insert(message);
-  }
-})
+        message.user = Meteor.userId();
+        Messages.insert(message);
+    },
+
+    testRive: function () {
+        console.log('testing rivescript');
+    }
+});
