@@ -34,6 +34,8 @@ Meteor.startup(function() {
         name: "random"
     });
 
+    Messages.remove({});
+
     Factory.define('message', Messages, {
         text: function() {
             return Fake.sentence();
