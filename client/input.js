@@ -5,11 +5,25 @@ Template.footer.events({
             var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
             if (charCode == 13) {
                 e.stopPropagation();
+                var message = $('.input-box_text').val();
                 Meteor.call('newMessage', {
-                    text: $('.input-box_text').val(),
+                    text: message,
                     channel: Session.get('channel')
                 });
                 $('.input-box_text').val("");
+
+
+                Meteor.call('reply', message, function (error, result) {
+                    if (error) {
+                        console.log('error');
+                    } else {
+                        Meteor.call('newMessage', {
+                            text: result,
+                            channel: Session.get('channel')
+                        });
+                    }
+                });
+
                 return false;
             }
         }
