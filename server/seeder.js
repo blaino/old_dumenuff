@@ -1,31 +1,6 @@
-// Meteor.startup(function() {
-
-//   Meteor.users.remove({});
-//   Accounts.createUser({
-//     username: "scotchio",
-//     email: "scotch@example.com",
-//     password: "dummypassword"
-//   });
-
-//   Factory.define('message', Messages, {
-//     text: function() {
-//     	return Fake.sentence();
-//     },
-//     user: Meteor.users.findOne()._id,
-//     timestamp: Date.now()
-//   });
-
-//   // Add this if you want to remove all messages before seeding
-//   Messages.remove({});
-
-//   if (Messages.find({}).count() === 0) {
-//     _(4).times(function(n) {
-//       Factory.create('message');
-//     });
-//   }
-// });
-
 Meteor.startup(function() {
+    Messages.remove({});
+
     Channels.remove({});
     Channels.insert({
         name: "general"
@@ -34,14 +9,30 @@ Meteor.startup(function() {
         name: "random"
     });
 
-    Messages.remove({});
+    Meteor.users.remove({});
+    Accounts.createUser({
+        username: "player",
+        email: "player@example.com",
+        password: "password"
+    });
 
     Factory.define('message', Messages, {
-        text: function() {
-            return Fake.sentence();
-        },
-        user: Meteor.users.findOne()._id,
+        text: "I'm a message from player, a greeting perhaps randomly",
+        user: Meteor.users.findOne({
+            username: "player"
+        })._id,
         timestamp: Date.now(),
         channel: 'general'
     });
+
+    Factory.create('message');
+
+    // Factory.define('message', Messages, {
+    //     text: function() {
+    //         return Fake.sentence();
+    //     },
+    //     user: Meteor.users.findOne()._id,
+    //     timestamp: Date.now(),
+    //     channel: 'general'
+    // });
 });

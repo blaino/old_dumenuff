@@ -1,7 +1,7 @@
 Meteor.methods({
-    newMessage: function (message) {
+    newMessage: function (userId, message) {
   	message.timestamp = Date.now();
-        message.user = Meteor.userId();
+        message.user = userId;
         Messages.insert(message);
     },
 

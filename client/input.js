@@ -6,10 +6,15 @@ Template.footer.events({
             if (charCode == 13) {
                 e.stopPropagation();
                 var message = $('.input-box_text').val();
-                Meteor.call('newMessage', {
-                    text: message,
-                    channel: Session.get('channel')
-                });
+
+                Meteor.call(
+                    'newMessage',
+                    Meteor.userId(),
+                    {
+                        text: message,
+                        channel: Session.get('channel')
+                    }
+                );
                 $('.input-box_text').val("");
 
 
@@ -17,10 +22,14 @@ Template.footer.events({
                     if (error) {
                         console.log('error');
                     } else {
-                        Meteor.call('newMessage', {
-                            text: result,
-                            channel: Session.get('channel')
-                        });
+                        Meteor.call(
+                            'newMessage',
+                            Meteor.users.findOne({username: "player"}),
+                            {
+                                text: result,
+                                channel: Session.get('channel')
+                            }
+                        );
                     }
                 });
 
