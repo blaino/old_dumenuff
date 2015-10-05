@@ -76,6 +76,8 @@
 + (hello|hi|hey|howdy|hola|hai|yo) [*]
 - How do you do. Please state your problem.
 - Hi. What seems to be your problem?
+- <star>
+- <star> to you
 
 + [*] computer [*]
 - Do computers worry you?
