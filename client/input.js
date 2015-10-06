@@ -9,7 +9,8 @@ Template.footer.events({
 
                 Meteor.call(
                     'newMessage',
-                    Meteor.userId(),
+                    // Human
+                    Meteor.users.findOne({_id: Meteor.userId()}),
                     {
                         text: message,
                         channel: Session.get('channel')
@@ -24,6 +25,7 @@ Template.footer.events({
                     } else {
                         Meteor.call(
                             'newMessage',
+                            // Bot
                             Meteor.users.findOne({username: "player"}),
                             {
                                 text: result,

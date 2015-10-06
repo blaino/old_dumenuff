@@ -14,16 +14,6 @@ Template.registerHelper("timestampToTime", function (timestamp) {
     return hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 });
 
-Template.registerHelper("usernameFromId", function (userId) {
-    var user = Meteor.users.findOne({_id: userId});
-
-    if (typeof user === "undefined") {
-	return "Anonymous";
-    }
-
-    return user.username;
-});
-
 Template.listings.helpers({
     channels: function () {
         return Channels.find();

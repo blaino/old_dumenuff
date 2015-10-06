@@ -9,23 +9,24 @@ Meteor.startup(function() {
         name: "random"
     });
 
-    Meteor.users.remove({});
-    Accounts.createUser({
-        username: "player",
-        email: "player@example.com",
-        password: "password"
-    });
+    //Meteor.users.remove({});
 
-    Factory.define('message', Messages, {
-        text: "I'm a message from player, a greeting perhaps randomly",
-        user: Meteor.users.findOne({
-            username: "player"
-        })._id,
-        timestamp: Date.now(),
-        channel: 'general'
-    });
+    // Accounts.createUser({
+    //     username: "player",
+    //     email: "player@example.com",
+    //     password: "password"
+    // });
 
-    Factory.create('message');
+    // Factory.define('message', Messages, {
+    //     text: "I'm a message from player, a greeting perhaps randomly",
+    //     user: Meteor.users.findOne({
+    //         username: "player"
+    //     })._id,
+    //     timestamp: Date.now(),
+    //     channel: 'general'
+    // });
+
+    // Factory.create('message');
 
     // Factory.define('message', Messages, {
     //     text: function() {
