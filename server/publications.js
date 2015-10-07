@@ -11,3 +11,12 @@ Meteor.publish("allUsernames", function () {
 Meteor.publish('channels', function () {
     return Channels.find();
 });
+
+Meteor.publish('scores', function () {
+    if (this.userId) {
+        return Meteor.users.find({_id: this.userId},
+                                 {fields: {'score': 1}});
+    } else {
+        this.ready();
+    }
+});

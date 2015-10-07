@@ -9,6 +9,11 @@ Meteor.startup(function() {
         name: "random"
     });
 
+
+    Meteor.users.update({},
+                        {$set: {score: 0}},
+                        {multi: true});
+
     //Meteor.users.remove({});
 
     // Accounts.createUser({

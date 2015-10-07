@@ -2,6 +2,8 @@ Meteor.subscribe('channels');
 
 Meteor.subscribe('allUsernames');
 
+Meteor.subscribe('scores');
+
 Template.messages.onCreated(function() {
   var self = this;
   self.autorun(function() {
