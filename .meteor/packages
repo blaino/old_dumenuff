@@ -27,3 +27,5 @@ meteorhacks:npm
 
 
 npm-container
+sanjo:jasmine
+velocity:html-reporter
