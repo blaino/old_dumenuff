@@ -28,4 +28,18 @@ describe('Users', function () {
     it("should include a user with username 'player'", function () {
         expect(Meteor.users.findOne({username: "player"})).not.toBe(null);
     });
+
+    it("new ones should have their score set to 0", function () {
+        Accounts.createUser({
+            username: "integUser",
+            email: "integUser@example.com",
+            password: "password"
+        });
+
+        user = Meteor.users.findOne({username: "integUser"});
+
+        expect(user.score).toEqual(0);
+
+        Meteor.users.remove({username: "integUser"});
+    });
 });
