@@ -1,16 +1,7 @@
 describe('Getting started with Jasmine and Meteor', function () {
     'use strict';
 
-    describe('Canary in coal mine', function () {
-        it('true should not be false', function () {
-            expect(true).not.toEqual(false);
-        });
-    });
-
-
-    describe('messages', function () {
-
-    });
+    it("blik", function() {});
 
     it("winning a round should increase user's score by 1 point", function () {
     });

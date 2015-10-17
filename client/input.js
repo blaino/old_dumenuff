@@ -5,21 +5,21 @@ Template.footer.events({
             var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
             if (charCode == 13) {
                 e.stopPropagation();
-                var message = $('.input-box_text').val();
+                var messageText = $('.input-box_text').val();
 
                 Meteor.call(
                     'newMessage',
                     // Human
                     Meteor.users.findOne({_id: Meteor.userId()}),
                     {
-                        text: message,
+                        text: messageText,
                         channel: Session.get('channel')
                     }
                 );
                 $('.input-box_text').val("");
 
 
-                Meteor.call('reply', message, function (error, result) {
+                Meteor.call('reply', messageText, function (error, result) {
                     if (error) {
                         console.log('error');
                     } else {
@@ -49,5 +49,14 @@ Template.channel.events({
     'click .channel': function (e) {
         console.log('got channel click');
         Session.set('channel', this.name);
+    }
+});
+
+Template.listings.events({
+    'click #bot-button': function () {
+        console.log('bot button clicked');
+    },
+    'click #human-button': function () {
+        console.log('human button clicked');
     }
 });
