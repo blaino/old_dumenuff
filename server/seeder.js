@@ -18,10 +18,6 @@ Meteor.startup(function() {
         });
     };
 
-    Meteor.users.update({},
-                        {$set: {score: 0}},
-                        {multi: true});
-
     // Factory.define('message', Messages, {
     //     text: "I'm a message from player, a greeting perhaps randomly",
     //     user: Meteor.users.findOne({

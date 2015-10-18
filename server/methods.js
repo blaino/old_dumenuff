@@ -19,5 +19,27 @@ Meteor.methods({
                 });
         });
         return reply.result;
+    },
+
+    updateScore: function (winnerId) {
+
+        console.log('updateScroe called with id:', winnerId);
+
+        // Look for winner in scores
+        var winnerScore = Scores.findOne({player: winnerId});
+
+        // If winner is there, increment score
+        if (winnerScore) {
+            console.log('updating');
+            Scores.update({player: winnerId}, {$inc: {score: 1}});
+        } else {
+            // If winner is not there, insert new score and increment
+            console.log('inserting');
+            Scores.insert({player: winnerId, score: 1});
+        }
+    },
+
+    testMethod: function () {
+        console.log('testMethod called');
     }
 });
