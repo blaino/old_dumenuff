@@ -55,6 +55,7 @@ Template.channel.events({
 Template.listings.events({
     'click #bot-button': function () {
         console.log('bot button clicked');
+        Meteor.call('updateScore', Meteor.userId());
     },
     'click #human-button': function () {
         console.log('human button clicked');
