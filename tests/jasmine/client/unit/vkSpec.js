@@ -1,15 +1,15 @@
 describe('Getting started with Jasmine and Meteor', function () {
     'use strict';
 
-    it("blik", function() {});
+    it("a user's score should be a number displayed in the ui", function () {
+        var score = Number($('.user-menu_score').text());
+        expect(score).toEqual(jasmine.any(Number));
+    });
 
     it("winning a round should increase user's score by 1 point", function () {
     });
 
     it("losing a round should increase opponent's score by 1 point", function () {
-    });
-
-    it("bot response time should vary", function () {
     });
 
     it("clicking bot when playing a bot is a win", function () {

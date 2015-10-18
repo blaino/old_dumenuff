@@ -33,12 +33,14 @@ Template.channel.helpers({
 Template.footer.helpers({
     thisPlayersScore: function () {
         var playerScore = Scores.findOne({player: Meteor.userId()});
-        var score = playerScore.score || 0;
+        var score = 0;
+        if (playerScore) {
+            score = playerScore.score;
+        }
         return score;
     }
 });
 
 Meteor.startup(function() {
     Session.set('channel', 'general');
-    console.log('Session get channel: ', Session.get('channel'));
 });

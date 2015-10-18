@@ -18,6 +18,8 @@ Meteor.methods({
                     done(null, reply);
                 });
         });
+        var delay = 1000 + 2000 * Math.random();
+        Meteor._sleepForMs(delay);
         return reply.result;
     },
 
