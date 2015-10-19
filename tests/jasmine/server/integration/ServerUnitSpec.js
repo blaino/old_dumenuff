@@ -135,6 +135,15 @@ describe('methods', function () {
             // expect one player in room to be the oldest
         });
 
+        it("should be able to be called multiple time to setup rooms", function () {
+            var beforeCount = Rooms.find().count();
+            Meteor.call('match');
+            Meteor.call('match');
+            Meteor.call('match');
+            var afterCount = Rooms.find().count();
+            expect(afterCount).toEqual(beforeCount + 3);
+        });
+
     });
 
 });

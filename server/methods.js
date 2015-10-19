@@ -53,17 +53,9 @@ Meteor.methods({
 
         // pick random from rest, remove
         var remaining = Waiting.find({}).fetch();
-        console.log('remaining', remaining);
-
         var count = remaining.length;
-        console.log('count', count);
         var index = Math.floor(Math.random() * count);
-
-        console.log('index', index);
         var randomSelection = remaining[index];
-
-        console.log('randomSelection', randomSelection);
-
         Waiting.remove({player: randomSelection._id});
 
         // create a room with oldest and the random selection
