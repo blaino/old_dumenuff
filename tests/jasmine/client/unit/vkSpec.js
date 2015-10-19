@@ -6,12 +6,6 @@ describe('Getting started with Jasmine and Meteor', function () {
         expect(score).toEqual(jasmine.any(Number));
     });
 
-    it("winning a round should increase user's score by 1 point", function () {
-    });
-
-    it("losing a round should increase opponent's score by 1 point", function () {
-    });
-
     it("clicking bot when playing a bot is a win", function () {
     });
 
@@ -22,6 +16,12 @@ describe('Getting started with Jasmine and Meteor', function () {
     });
 
     it("clicking human when playing a bot is a loss", function () {
+    });
+
+    it("winning a round should increase user's score by 1 point", function () {
+    });
+
+    it("losing a round should increase opponent's score by 1 point", function () {
     });
 
     it("both buttons should be inactive before the game has started", function () {

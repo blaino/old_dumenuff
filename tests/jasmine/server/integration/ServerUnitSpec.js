@@ -79,4 +79,55 @@ describe('methods', function () {
         xit("should add score if one for the loser does not yet exist");
     });
 
+    describe("addPlayer", function () {
+        it("should put timestamped player in the Waiting collection", function () {
+            var player = Meteor.users.findOne({username: "unitUser"});
+            var beforeCount = Waiting.find().count();
+            Meteor.call('addPlayer', player._id);
+            var afterCount = Waiting.find().count();
+            expect(afterCount).toEqual(beforeCount + 1);
+
+            var waitingPlayer = Waiting.findOne({player: player._id});
+            expect(waitingPlayer.timeEntered).toEqual(jasmine.any(Number));
+            Waiting.remove({player: player._id});
+        });
+    });
+
+    describe("match", function () {
+        beforeEach(function () {
+            var player;
+            for (i = 1; i < 7; i++) {
+                Accounts.createUser({
+                    username: "unitUser" + String(i),
+                    email: "unitUser" + String(i) + "@example.com",
+                    password: "password"
+                });
+                player = Meteor.users.findOne({username: "unitUser" + String(i)});
+                Meteor.call('addPlayer', player._id);
+            };
+        });
+
+        afterEach(function () {
+            var player;
+            for (i = 1; i < 7; i++) {
+                player = Meteor.users.findOne({username: "unitUser" + String(i)});
+                Waiting.remove({player: player._id});
+                Meteor.users.remove({username: "unitUser" + String(i)});
+            };
+            Rooms.remove({});
+        });
+
+        it("should put the oldest in a room with one of the other players", function () {
+            var beforeCount = Rooms.find().count();
+            Meteor.call('match');
+            var afterCount = Rooms.find().count();
+            expect(afterCount).toEqual(beforeCount + 1);
+
+            room = Rooms.findOne({});
+            console.log('room', room);
+            // expect one player in room to be the oldest
+        });
+
+    });
+
 });

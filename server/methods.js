@@ -41,7 +41,31 @@ Meteor.methods({
         }
     },
 
-    testMethod: function () {
-        console.log('testMethod called');
+    addPlayer: function (playerId) {
+        Waiting.insert({player: playerId, timeEntered: Date.now()});
+    },
+
+    match: function () {
+        // get Waiting sorted
+        var waiting = Waiting.find({}, {sort: {timeEntered: 1}}).fetch();
+
+        // get the oldest, remove from Waiting
+        var oldest = waiting[0];
+        console.log('oldest', oldest);
+
+        Waiting.remove({player: oldest._id});
+
+        // pick random from rest, remove
+        var remaining = Waiting.find({}, {sort: {timeEntered: 1}}).fetch();
+        var count = waiting.length;
+        var randomSelection = remaining[Math.floor(Math.random() * count)];
+        Waiting.remove({player: randomSelection._id});
+        console.log('randomSelection', randomSelection);
+
+        // create a room with oldest and the random selection
+        var room = {player1: oldest._id, player2: randomSelection._id};
+        // add it to Rooms
+        Rooms.insert(room);
     }
+
 });
