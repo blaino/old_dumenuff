@@ -25,8 +25,6 @@ Meteor.methods({
 
     updateScore: function (winnerId) {
 
-        console.log('updateScroe called with id:', winnerId);
-
         // Look for winner in scores
         var winnerScore = Scores.findOne({player: winnerId});
 
@@ -51,19 +49,25 @@ Meteor.methods({
 
         // get the oldest, remove from Waiting
         var oldest = waiting[0];
-        console.log('oldest', oldest);
-
-        Waiting.remove({player: oldest._id});
+        Waiting.remove(oldest._id);
 
         // pick random from rest, remove
-        var remaining = Waiting.find({}, {sort: {timeEntered: 1}}).fetch();
-        var count = waiting.length;
-        var randomSelection = remaining[Math.floor(Math.random() * count)];
-        Waiting.remove({player: randomSelection._id});
+        var remaining = Waiting.find({}).fetch();
+        console.log('remaining', remaining);
+
+        var count = remaining.length;
+        console.log('count', count);
+        var index = Math.floor(Math.random() * count);
+
+        console.log('index', index);
+        var randomSelection = remaining[index];
+
         console.log('randomSelection', randomSelection);
 
+        Waiting.remove({player: randomSelection._id});
+
         // create a room with oldest and the random selection
-        var room = {player1: oldest._id, player2: randomSelection._id};
+        var room = {player1: oldest.player, player2: randomSelection.player};
         // add it to Rooms
         Rooms.insert(room);
     }

@@ -124,7 +124,14 @@ describe('methods', function () {
             expect(afterCount).toEqual(beforeCount + 1);
 
             room = Rooms.findOne({});
-            console.log('room', room);
+            expect(room.player1).not.toEqual(room.player2);
+
+            // expect players in room to be user ids
+            var account1 = Meteor.users.findOne({_id: room.player1});
+            var account2 = Meteor.users.findOne({_id: room.player2});
+            expect(account1).not.toEqual(null);
+            expect(account2).not.toEqual(null);
+
             // expect one player in room to be the oldest
         });
 
