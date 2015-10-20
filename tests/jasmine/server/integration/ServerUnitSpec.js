@@ -67,13 +67,12 @@ describe('methods', function () {
                Meteor.users.remove({username: "thisUnitUser"});
            });
 
-        it("should increment score for already existing player", function () {
+        it("should set score to one for first time update", function () {
             var player = Meteor.users.findOne({username: "unitUser"});
-            var beforeScore = Scores.findOne({player: player._id});
             Meteor.call('updateScore',
                         player._id);
             var afterScore = Scores.findOne({player: player._id});
-            expect(afterScore.score).toEqual(beforeScore.score + 1);
+            expect(afterScore.score).toEqual(1);
         });
 
         xit("should add score if one for the loser does not yet exist");
@@ -96,7 +95,7 @@ describe('methods', function () {
     describe("match", function () {
         beforeEach(function () {
             var player;
-            for (i = 1; i < 7; i++) {
+            for (i = 1; i <= 7; i++) {
                 Accounts.createUser({
                     username: "unitUser" + String(i),
                     email: "unitUser" + String(i) + "@example.com",
@@ -109,7 +108,7 @@ describe('methods', function () {
 
         afterEach(function () {
             var player;
-            for (i = 1; i < 7; i++) {
+            for (i = 1; i <= 7; i++) {
                 player = Meteor.users.findOne({username: "unitUser" + String(i)});
                 Waiting.remove({player: player._id});
                 Meteor.users.remove({username: "unitUser" + String(i)});
@@ -137,11 +136,16 @@ describe('methods', function () {
 
         it("should be able to be called multiple time to setup rooms", function () {
             var beforeCount = Rooms.find().count();
+            var beforeWaitingCount = Waiting.find().count();
+
             Meteor.call('match');
             Meteor.call('match');
             Meteor.call('match');
+
             var afterCount = Rooms.find().count();
+            var afterWaitingCount = Waiting.find().count();
             expect(afterCount).toEqual(beforeCount + 3);
+            expect(afterWaitingCount).toEqual(beforeWaitingCount - 6);
         });
 
     });

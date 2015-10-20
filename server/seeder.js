@@ -1,40 +1,57 @@
 Meteor.startup(function() {
     Messages.remove({});
     Channels.remove({});
-    // Meteor.users.remove({});
+    Meteor.users.remove({});
+    Rooms.remove({});
+    Waiting.remove({});
 
-    Channels.insert({
-        name: "general"
-    });
-    Channels.insert({
-        name: "random"
-    });
-
-    if (!Meteor.users.findOne({username: "player"})) {
-        Accounts.createUser({
-            username: "player",
-            email: "player@example.com",
-            password: "password"
-        });
+    // Create the user accounts, add the players
+    var numPlayers = 4;
+    var player;
+    for (i = 1; i <= numPlayers; i++) {
+        if (!Meteor.users.findOne({username: "seedUser" + i})) {
+            Accounts.createUser({
+                username: "seedUser" + String(i),
+                email: "seedUser" + String(i) + "@example.com",
+                password: "password"
+            });
+            player = Meteor.users.findOne({username: "seedUser" + String(i)});
+            Meteor.call('addPlayer', player._id);
+        };
     };
 
-    // Factory.define('message', Messages, {
-    //     text: "I'm a message from player, a greeting perhaps randomly",
-    //     user: Meteor.users.findOne({
-    //         username: "player"
-    //     })._id,
-    //     timestamp: Date.now(),
-    //     channel: 'general'
-    // });
+    // Match the players in rooms
+    var waiting = Waiting.find({}).fetch().length;
+    console.log('waiting', waiting);
+    while (waiting > 0) {
+        Meteor.call('match');
+        waiting = Waiting.find({}).fetch().length;
+    };
 
-    // Factory.create('message');
+    // Meteor.call('match');
 
-    // Factory.define('message', Messages, {
-    //     text: function() {
-    //         return Fake.sentence();
-    //     },
-    //     user: Meteor.users.findOne()._id,
-    //     timestamp: Date.now(),
-    //     channel: 'general'
-    // });
+    // Create a chat channel for each room
+    var rooms = Rooms.find({});
+    rooms.forEach(function (room) {
+        console.log('room', room);
+        Channels.insert({
+            name: room._id
+        });
+    });
+
+
+
+
+/* BIG INTEG TEST
+ addPlayer(a first player)
+ addPlayer(a second player)
+ match()
+ set session channel variable to room id (this may only be a client side thing)
+ start the game
+ chat
+ player chooses bot/human
+ updateScore(winning player)
+ deMatch()
+*/
+
 });

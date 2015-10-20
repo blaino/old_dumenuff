@@ -49,14 +49,14 @@ Meteor.methods({
 
         // get the oldest, remove from Waiting
         var oldest = waiting[0];
-        Waiting.remove(oldest._id);
+        Waiting.remove({player: oldest.player});
 
         // pick random from rest, remove
         var remaining = Waiting.find({}).fetch();
         var count = remaining.length;
         var index = Math.floor(Math.random() * count);
         var randomSelection = remaining[index];
-        Waiting.remove({player: randomSelection._id});
+        Waiting.remove({player: randomSelection.player});
 
         // create a room with oldest and the random selection
         var room = {player1: oldest.player, player2: randomSelection.player};

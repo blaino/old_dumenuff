@@ -45,6 +45,7 @@ Template.footer.events({
     }
 });
 
+// TODO: get rid of this
 Template.channel.events({
     'click .channel': function (e) {
         console.log('got channel click');
