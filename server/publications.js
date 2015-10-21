@@ -15,3 +15,7 @@ Meteor.publish('channels', function () {
 Meteor.publish('scores', function () {
     return Scores.find();
 });
+
+Meteor.publish('rooms', function () {
+    return Scores.find();
+});

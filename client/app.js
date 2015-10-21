@@ -4,7 +4,7 @@ Template.messages.helpers({
 
 Accounts.ui.config({
     passwordSignupFields: 'USERNAME_AND_EMAIL'
-})
+});
 
 Template.registerHelper("timestampToTime", function (timestamp) {
     var date = new Date(timestamp);
@@ -39,9 +39,4 @@ Template.footer.helpers({
         }
         return score;
     }
-});
-
-// TODO: get rid of this
-Meteor.startup(function() {
-    Session.set('channel', Rooms.findOne({})._id);
 });
