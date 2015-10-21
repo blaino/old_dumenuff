@@ -43,5 +43,5 @@ Template.footer.helpers({
 
 // TODO: get rid of this
 Meteor.startup(function() {
-    Session.set('channel', 'general');
+    Session.set('channel', Rooms.findOne({})._id);
 });
