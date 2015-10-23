@@ -34,7 +34,6 @@ Meteor.methods({
             Scores.update({player: winnerId}, {$inc: {score: 1}});
         } else {
             // If winner is not there, insert new score and increment
-            console.log('inserting');
             Scores.insert({player: winnerId, score: 1});
         }
     },
@@ -62,6 +61,21 @@ Meteor.methods({
         var room = {player1: oldest.player, player2: randomSelection.player};
         // add it to Rooms
         Rooms.insert(room);
+    },
+
+    findRoom: function (userId) {
+        var rooms = Rooms.find({}).fetch();
+        var foundRoom = null;
+        rooms.forEach(function (room) {
+            if ((room.player1 == userId) || (room.player2 == userId)) {
+                foundRoom = room;
+            };
+        });
+        if (foundRoom) {
+            return foundRoom;
+        } else {
+            throw new Meteor.Error("Room for " + userId + " not found");
+        }
     }
 
 });

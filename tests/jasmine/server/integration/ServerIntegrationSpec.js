@@ -24,6 +24,8 @@ describe('Integration test', function () {
     Meteor.call('createChannels');
     Meteor.call('postMessages');
 
+    console.log('messages', Messages.find({}).fetch());
+
     it('should have ' + (numPlayers / 2) + ' channels', function () {
         var numChannels = Channels.find({}).count();
         expect(numChannels).toEqual(numPlayers / 2);

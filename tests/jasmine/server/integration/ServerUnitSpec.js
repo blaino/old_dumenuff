@@ -92,28 +92,36 @@ describe('methods', function () {
         });
     });
 
+    function setupPlayersAndRooms() {
+        var player;
+        for (i = 1; i <= 7; i++) {
+            Accounts.createUser({
+                username: "unitUser" + String(i),
+                email: "unitUser" + String(i) + "@example.com",
+                password: "password"
+            });
+            player = Meteor.users.findOne({username: "unitUser" + String(i)});
+            Meteor.call('addPlayer', player._id);
+        };
+    };
+
+    function tearDownPlayersAndRooms() {
+        var player;
+        for (i = 1; i <= 7; i++) {
+            player = Meteor.users.findOne({username: "unitUser" + String(i)});
+            Waiting.remove({player: player._id});
+            Meteor.users.remove({username: "unitUser" + String(i)});
+        };
+        Rooms.remove({});
+    };
+
     describe("match", function () {
         beforeEach(function () {
-            var player;
-            for (i = 1; i <= 7; i++) {
-                Accounts.createUser({
-                    username: "unitUser" + String(i),
-                    email: "unitUser" + String(i) + "@example.com",
-                    password: "password"
-                });
-                player = Meteor.users.findOne({username: "unitUser" + String(i)});
-                Meteor.call('addPlayer', player._id);
-            };
+            setupPlayersAndRooms();
         });
 
         afterEach(function () {
-            var player;
-            for (i = 1; i <= 7; i++) {
-                player = Meteor.users.findOne({username: "unitUser" + String(i)});
-                Waiting.remove({player: player._id});
-                Meteor.users.remove({username: "unitUser" + String(i)});
-            };
-            Rooms.remove({});
+            tearDownPlayersAndRooms();
         });
 
         it("should put the oldest in a room with one of the other players", function () {
@@ -146,6 +154,36 @@ describe('methods', function () {
             var afterWaitingCount = Waiting.find().count();
             expect(afterCount).toEqual(beforeCount + 3);
             expect(afterWaitingCount).toEqual(beforeWaitingCount - 6);
+        });
+    });
+
+    describe("findRoom", function () {
+        beforeEach(function () {
+            setupPlayersAndRooms();
+            Meteor.call('match');
+        });
+
+        afterEach(function () {
+            tearDownPlayersAndRooms();
+        });
+
+
+        it("should return a room with unitUser1 as player1", function () {
+            var user = Meteor.users.findOne({username: "unitUser1"});
+            var userid = user._id;
+
+            Meteor.call('findRoom', userid, function (error, room) {
+                expect(error).not.toBeDefined();
+                expect(room.player1).toEqual(userid);
+            });
+        });
+
+        it("should return an error when trying to find room for non-existant userid", function () {
+            var bsId = 'bs1234';
+
+            Meteor.call('findRoom', bsId, function (error, room) {
+                expect(error).toBeDefined();
+            });
         });
 
     });

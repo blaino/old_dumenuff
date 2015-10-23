@@ -40,16 +40,19 @@ Meteor.methods({
     },
 
     postMessages: function () {
-        var player1 = Meteor.users.findOne({username: "seedUser1"})._id;
-        Factory.define('message', Messages, {
-            text: "A first message for seedUser1",
-            user: player1,
-            timestamp: Date.now(),
-            channel: Rooms.findOne({player1: player1})._id
+        users = Meteor.users.find({});
+        users.forEach(function (user) {
+            Meteor.call('findRoom', user._id, function (error, room) {
+                if (room) {
+                    Factory.define('message', Messages, {
+                        text: "A first message for" + user.username,
+                        user: user._id,
+                        timestamp: Date.now(),
+                        channel: room._id
+                    });
+                    Factory.create('message');
+                };
+            });
         });
-        Factory.create('message');
-
-        // Loop through each user and create a starter message
-        // (need to write findRoom(userId))
     }
 });
