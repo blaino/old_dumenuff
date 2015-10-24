@@ -9,6 +9,16 @@ describe('methods', function () {
                 password: "password"
             });
         }
+
+        var unitUserLoser = Meteor.users.findOne({username: "unitUserLoser"});
+        if (!unitUserLoser) {
+            Accounts.createUser({
+                username: "unitUserLoser",
+                email: "unitUserLoser@example.com",
+                password: "password"
+            });
+        }
+
     //});
 
     // afterEach(function () {
@@ -51,7 +61,7 @@ describe('methods', function () {
     });
 
     describe("updateScore", function () {
-        it("should add score if one for the winning player does not yet exist",
+        it("should add score to Scores if one for the winning player does not yet exist",
            function () {
                Accounts.createUser({
                    username: "thisUnitUser",
@@ -60,8 +70,7 @@ describe('methods', function () {
                });
                var beforeCount = Scores.find().count();
                var player = Meteor.users.findOne({username: "thisUnitUser"});
-               Meteor.call('updateScore',
-                           player._id);
+               Meteor.call('updateScore', player._id);
                var afterCount = Scores.find().count();
                expect(afterCount).toEqual(beforeCount + 1);
                Meteor.users.remove({username: "thisUnitUser"});
@@ -69,13 +78,74 @@ describe('methods', function () {
 
         it("should set score to one for first time update", function () {
             var player = Meteor.users.findOne({username: "unitUser"});
-            Meteor.call('updateScore',
-                        player._id);
+            Meteor.call('updateScore', player._id);
             var afterScore = Scores.findOne({player: player._id});
             expect(afterScore.score).toEqual(1);
         });
 
-        xit("should add score if one for the loser does not yet exist");
+        it("should increment score for subsequent updates", function () {
+            // depends on previous test
+            var player = Meteor.users.findOne({username: "unitUser"});
+            var beforeScore = Scores.findOne({player: player._id}).score;
+            Meteor.call('updateScore', player._id);
+            var afterScore = Scores.findOne({player: player._id}).score;
+            expect(afterScore).toEqual(beforeScore + 1);
+        });
+
+        it("should add score to Scores if one for the loser does not yet exist",
+           function () {
+               Accounts.createUser({
+                   username: "thisUnitUserWinner",
+                   email: "thisUnitUserWinner@example.com",
+                   password: "password"
+               });
+               Accounts.createUser({
+                   username: "thisUnitUserLoser",
+                   email: "thisUnitUserLoser@example.com",
+                   password: "password"
+               });
+               var winner = Meteor.users.findOne({username: "thisUnitUserWinner"});
+               var loser = Meteor.users.findOne({username: "thisUnitUserLoser"});
+
+               var beforeCount = Scores.find().count();
+               Meteor.call('updateScore', winner._id, loser._id);
+               var afterCount = Scores.find().count();
+               expect(afterCount).toEqual(beforeCount + 2);
+               Meteor.users.remove({username: "thisUnitUserLoser"});
+               Meteor.users.remove({username: "thisUnitUserWinner"});
+           });
+
+        it("should set loser score to -1 for first time update", function () {
+            var winner = Meteor.users.findOne({username: "unitUser"});
+            var loser = Meteor.users.findOne({username: "unitUserLoser"});
+            Meteor.call('updateScore', winner._id, loser._id);
+            var afterScore = Scores.findOne({player: loser._id});
+            expect(afterScore.score).toEqual(-1);
+        });
+
+        it("should decrement score for loser", function () {
+            // depends on previous test
+            var winner = Meteor.users.findOne({username: "unitUser"});
+            var loser = Meteor.users.findOne({username: "unitUserLoser"});
+            var beforeScore = Scores.findOne({player: loser._id}).score;
+            Meteor.call('updateScore', winner._id, loser._id);
+            var afterScore = Scores.findOne({player: loser._id}).score;
+            expect(afterScore).toEqual(beforeScore - 1);
+        });
+    });
+
+    describe("getWinner", function () {
+
+        xit("returns player that correctly selects bot", function () {
+            // getWinner(room, selector, selection);
+        });
+
+        xit("returns player that correctly selects human", function () {
+        });
+
+        xit("returns player that fooled human", function () {
+        });
+
     });
 
     describe("addPlayer", function () {

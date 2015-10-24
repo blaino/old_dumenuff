@@ -23,19 +23,24 @@ Meteor.methods({
         return reply.result;
     },
 
-    updateScore: function (winnerId) {
-
-        // Look for winner in scores
+    updateScore: function (winnerId, loserId) {
         var winnerScore = Scores.findOne({player: winnerId});
+        var loserScore = Scores.findOne({player: loserId});
 
-        // If winner is there, increment score
         if (winnerScore) {
-            console.log('updating');
+            console.log('updating winner');
             Scores.update({player: winnerId}, {$inc: {score: 1}});
         } else {
-            // If winner is not there, insert new score and increment
-            console.log('adding player to Score with score 1');
+            console.log('adding winner to Score with score 1');
             Scores.insert({player: winnerId, score: 1});
+        }
+
+        if (loserScore) {
+            console.log('updating loser');
+            Scores.update({player: loserId}, {$inc: {score: -1}});
+        } else {
+            console.log('adding loser to Score with score -1');
+            Scores.insert({player: loserId, score: -1});
         }
     },
 
