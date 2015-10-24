@@ -24,14 +24,26 @@ describe('Integration test', function () {
     Meteor.call('createChannels');
     Meteor.call('postMessages');
 
-    console.log('messages', Messages.find({}).fetch());
-
     it('should have ' + (numPlayers / 2) + ' channels', function () {
         var numChannels = Channels.find({}).count();
         expect(numChannels).toEqual(numPlayers / 2);
     });
+
     it('should have ' + numPlayers + ' messages', function () {
         var numMessages = Messages.find({}).count();
         expect(numMessages).toEqual(numPlayers);
     });
+
+    it('should change the score when updateScore() is called', function () {
+        var userId = Meteor.users.findOne({username: "seedUser4"})._id;
+
+        // First call initializes score. Rethink?
+        Meteor.call('updateScore', userId);
+        var beforeScore = Scores.findOne({player: userId}).score;
+        Meteor.call('updateScore', userId);
+        var afterScore = Scores.findOne({player: userId}).score;
+
+        expect(beforeScore).not.toEqual(afterScore);
+    });
+
 });

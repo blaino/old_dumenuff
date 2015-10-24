@@ -34,6 +34,7 @@ Meteor.methods({
             Scores.update({player: winnerId}, {$inc: {score: 1}});
         } else {
             // If winner is not there, insert new score and increment
+            console.log('adding player to Score with score 1');
             Scores.insert({player: winnerId, score: 1});
         }
     },
