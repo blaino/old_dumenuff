@@ -61,6 +61,10 @@ describe('methods', function () {
     });
 
     describe("updateScore", function () {
+
+        var winner = Meteor.users.findOne({username: "unitUser"});
+        var loser = Meteor.users.findOne({username: "unitUserLoser"});
+
         it("should add score to Scores if one for the winning player does not yet exist",
            function () {
                Accounts.createUser({
@@ -77,18 +81,16 @@ describe('methods', function () {
            });
 
         it("should set score to one for first time update", function () {
-            var player = Meteor.users.findOne({username: "unitUser"});
-            Meteor.call('updateScore', player._id);
-            var afterScore = Scores.findOne({player: player._id});
+            Meteor.call('updateScore', winner._id);
+            var afterScore = Scores.findOne({player: winner._id});
             expect(afterScore.score).toEqual(1);
         });
 
         it("should increment score for subsequent updates", function () {
             // depends on previous test
-            var player = Meteor.users.findOne({username: "unitUser"});
-            var beforeScore = Scores.findOne({player: player._id}).score;
-            Meteor.call('updateScore', player._id);
-            var afterScore = Scores.findOne({player: player._id}).score;
+            var beforeScore = Scores.findOne({player: winner._id}).score;
+            Meteor.call('updateScore', winner._id);
+            var afterScore = Scores.findOne({player: winner._id}).score;
             expect(afterScore).toEqual(beforeScore + 1);
         });
 
@@ -116,8 +118,6 @@ describe('methods', function () {
            });
 
         it("should set loser score to -1 for first time update", function () {
-            var winner = Meteor.users.findOne({username: "unitUser"});
-            var loser = Meteor.users.findOne({username: "unitUserLoser"});
             Meteor.call('updateScore', winner._id, loser._id);
             var afterScore = Scores.findOne({player: loser._id});
             expect(afterScore.score).toEqual(-1);
@@ -125,8 +125,6 @@ describe('methods', function () {
 
         it("should decrement score for loser", function () {
             // depends on previous test
-            var winner = Meteor.users.findOne({username: "unitUser"});
-            var loser = Meteor.users.findOne({username: "unitUserLoser"});
             var beforeScore = Scores.findOne({player: loser._id}).score;
             Meteor.call('updateScore', winner._id, loser._id);
             var afterScore = Scores.findOne({player: loser._id}).score;
