@@ -134,38 +134,40 @@ describe('methods', function () {
 
     describe("getWinner", function () {
 
-        it("returns player that correctly selects bot", function () {
+        var room,
+            unitUserId;
+
+        beforeEach(function () {
             setupPlayersInWaiting(2);
-            Meteor.call('match');
-            var room = Rooms.findOne({});
+            unitUserId = Meteor.users.findOne({username: "unitUser1"})._id;
+            Meteor.call('match', 0);
+            room = Meteor.call('findRoom', unitUserId);
+        });
+
+        afterEach(function () {
+            tearDownPlayersAndRooms(2);
+        });
+
+        it("returns player that correctly selects bot", function () {
             room.player2 = "bot"; // Having to overwrite is lame
             var selectee = room.player2;
             var selection = "bot";
             var winner = Meteor.call('getWinner', room, selectee, selection);
             expect(winner).toEqual(room.player1);
-            tearDownPlayersAndRooms(2);
         });
 
         it("returns id of player that correctly selects human", function () {
-            setupPlayersInWaiting(2);
-            Meteor.call('match');
-            var room = Rooms.findOne({});
             var selectee = room.player2;
             var selection = "human";
             var winner = Meteor.call('getWinner', room, selectee, selection);
             expect(winner).toEqual(room.player1);
-            tearDownPlayersAndRooms(2);
         });
 
         it("returns player that fooled human", function () {
-            setupPlayersInWaiting(2);
-            Meteor.call('match');
-            var room = Rooms.findOne({});
             var selectee = room.player2;
             var selection = "bot";
             var winner = Meteor.call('getWinner', room, selectee, selection);
             expect(winner).toEqual(room.player2);
-            tearDownPlayersAndRooms(2);
         });
 
     });
@@ -186,6 +188,8 @@ describe('methods', function () {
 
     function setupPlayersInWaiting(numPlayers) {
         var player;
+
+        Rooms.remove({});
         for (i = 1; i <= numPlayers; i++) {
             if (!Meteor.users.findOne({username: "unitUser" + String(i)})) {
                 Accounts.createUser({
@@ -218,13 +222,14 @@ describe('methods', function () {
             tearDownPlayersAndRooms(7);
         });
 
-        it("should handle when there is only 1 player", function () {
+        xit("should handle when there is only 1 player", function () {
+            // Or should it? When would you start with less than 2 players?
             expect(true).toEqual(false);
         });
 
         it("should put the oldest in a room with one of the other players", function () {
             var beforeCount = Rooms.find().count();
-            Meteor.call('match');
+            Meteor.call('match', 0);
             var afterCount = Rooms.find().count();
             expect(afterCount).toEqual(beforeCount + 1);
 
@@ -244,9 +249,9 @@ describe('methods', function () {
             var beforeCount = Rooms.find().count();
             var beforeWaitingCount = Waiting.find().count();
 
-            Meteor.call('match');
-            Meteor.call('match');
-            Meteor.call('match');
+            Meteor.call('match', 0);
+            Meteor.call('match', 0);
+            Meteor.call('match', 0);
 
             var afterCount = Rooms.find().count();
             var afterWaitingCount = Waiting.find().count();
@@ -258,7 +263,7 @@ describe('methods', function () {
     describe("findRoom", function () {
         beforeEach(function () {
             setupPlayersInWaiting(7);
-            Meteor.call('match');
+            Meteor.call('match', 0);
         });
 
         afterEach(function () {

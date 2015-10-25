@@ -48,7 +48,7 @@ Meteor.methods({
         Waiting.insert({player: playerId, timeEntered: Date.now()});
     },
 
-    match: function () {
+    match: function (percentBot) {
         // get Waiting sorted
         var waiting = Waiting.find({}, {sort: {timeEntered: 1}}).fetch();
 
@@ -56,17 +56,23 @@ Meteor.methods({
         var oldest = waiting[0];
         Waiting.remove({player: oldest.player});
 
-        // pick random from rest, remove
-        var remaining = Waiting.find({}).fetch();
-        var count = remaining.length;
-        var index = Math.floor(Math.random() * count);
-        var randomSelection = remaining[index];
-        Waiting.remove({player: randomSelection.player});
+        var matchWithBot = Math.random() < (percentBot / 100);
 
-        // create a room with oldest and the random selection
-        var room = {player1: oldest.player, player2: randomSelection.player};
-        // add it to Rooms
-        Rooms.insert(room);
+        console.log('matchWithBot', matchWithBot);
+
+        if (!matchWithBot) {
+            // pick random from rest, remove
+            var remaining = Waiting.find({}).fetch();
+            var count = remaining.length;
+            var index = Math.floor(Math.random() * count);
+            var randomSelection = remaining[index];
+            Waiting.remove({player: randomSelection.player});
+
+            // create a room with oldest and the random selection
+            var room = {player1: oldest.player, player2: randomSelection.player};
+            // add it to Rooms
+            Rooms.insert(room);
+        }
     },
 
     findRoom: function (userId) {
