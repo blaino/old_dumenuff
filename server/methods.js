@@ -82,6 +82,28 @@ Meteor.methods({
         } else {
             throw new Meteor.Error("Room for " + userId + " not found");
         }
-    }
+    },
 
+    getWinner: function (room, selectee, selection) {
+
+        var selector;
+
+        if (room.player1 === selectee) {
+            selector = room.player2;
+        } else {
+            selector = room.player1;
+        };
+
+        if (selection === "human" && selectee !== "bot") {
+            return selector;
+        };
+
+        if (selection === "bot" && selectee == "bot") {
+            return selector;
+        };
+
+        if (selection == "bot" && selectee !== "bot") {
+            return selectee;
+        };
+    }
 });

@@ -134,14 +134,38 @@ describe('methods', function () {
 
     describe("getWinner", function () {
 
-        xit("returns player that correctly selects bot", function () {
-            // getWinner(room, selector, selection);
+        it("returns player that correctly selects bot", function () {
+            setupPlayersInWaiting(2);
+            Meteor.call('match');
+            var room = Rooms.findOne({});
+            room.player2 = "bot"; // Having to overwrite is lame
+            var selectee = room.player2;
+            var selection = "bot";
+            var winner = Meteor.call('getWinner', room, selectee, selection);
+            expect(winner).toEqual(room.player1);
+            tearDownPlayersAndRooms(2);
         });
 
-        xit("returns player that correctly selects human", function () {
+        it("returns id of player that correctly selects human", function () {
+            setupPlayersInWaiting(2);
+            Meteor.call('match');
+            var room = Rooms.findOne({});
+            var selectee = room.player2;
+            var selection = "human";
+            var winner = Meteor.call('getWinner', room, selectee, selection);
+            expect(winner).toEqual(room.player1);
+            tearDownPlayersAndRooms(2);
         });
 
-        xit("returns player that fooled human", function () {
+        it("returns player that fooled human", function () {
+            setupPlayersInWaiting(2);
+            Meteor.call('match');
+            var room = Rooms.findOne({});
+            var selectee = room.player2;
+            var selection = "bot";
+            var winner = Meteor.call('getWinner', room, selectee, selection);
+            expect(winner).toEqual(room.player2);
+            tearDownPlayersAndRooms(2);
         });
 
     });
@@ -160,22 +184,24 @@ describe('methods', function () {
         });
     });
 
-    function setupPlayersAndRooms() {
+    function setupPlayersInWaiting(numPlayers) {
         var player;
-        for (i = 1; i <= 7; i++) {
-            Accounts.createUser({
-                username: "unitUser" + String(i),
-                email: "unitUser" + String(i) + "@example.com",
-                password: "password"
-            });
+        for (i = 1; i <= numPlayers; i++) {
+            if (!Meteor.users.findOne({username: "unitUser" + String(i)})) {
+                Accounts.createUser({
+                    username: "unitUser" + String(i),
+                    email: "unitUser" + String(i) + "@example.com",
+                    password: "password"
+                });
+            };
             player = Meteor.users.findOne({username: "unitUser" + String(i)});
             Meteor.call('addPlayer', player._id);
         };
     };
 
-    function tearDownPlayersAndRooms() {
+    function tearDownPlayersAndRooms(numPlayers) {
         var player;
-        for (i = 1; i <= 7; i++) {
+        for (i = 1; i <= numPlayers; i++) {
             player = Meteor.users.findOne({username: "unitUser" + String(i)});
             Waiting.remove({player: player._id});
             Meteor.users.remove({username: "unitUser" + String(i)});
@@ -185,11 +211,15 @@ describe('methods', function () {
 
     describe("match", function () {
         beforeEach(function () {
-            setupPlayersAndRooms();
+            setupPlayersInWaiting(7);
         });
 
         afterEach(function () {
-            tearDownPlayersAndRooms();
+            tearDownPlayersAndRooms(7);
+        });
+
+        it("should handle when there is only 1 player", function () {
+            expect(true).toEqual(false);
         });
 
         it("should put the oldest in a room with one of the other players", function () {
@@ -227,12 +257,12 @@ describe('methods', function () {
 
     describe("findRoom", function () {
         beforeEach(function () {
-            setupPlayersAndRooms();
+            setupPlayersInWaiting(7);
             Meteor.call('match');
         });
 
         afterEach(function () {
-            tearDownPlayersAndRooms();
+            tearDownPlayersAndRooms(7);
         });
 
 
