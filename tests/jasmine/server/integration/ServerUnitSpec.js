@@ -133,7 +133,6 @@ describe('methods', function () {
     });
 
     describe("getWinner", function () {
-
         var room,
             unitUserId;
 
@@ -227,37 +226,49 @@ describe('methods', function () {
             expect(true).toEqual(false);
         });
 
-        it("should put the oldest in a room with one of the other players", function () {
-            var beforeCount = Rooms.find().count();
-            Meteor.call('match', 0);
-            var afterCount = Rooms.find().count();
-            expect(afterCount).toEqual(beforeCount + 1);
+        it("should put the oldest in a room with one of the other players (0% bot)",
+           function () {
+               var beforeCount = Rooms.find().count();
+               Meteor.call('match', 0);
+               var afterCount = Rooms.find().count();
+               expect(afterCount).toEqual(beforeCount + 1);
 
-            room = Rooms.findOne({});
-            expect(room.player1).not.toEqual(room.player2);
+               room = Rooms.findOne({});
+               expect(room.player1).not.toEqual(room.player2);
 
-            // expect players in room to be user ids
-            var account1 = Meteor.users.findOne({_id: room.player1});
-            var account2 = Meteor.users.findOne({_id: room.player2});
-            expect(account1).not.toEqual(null);
-            expect(account2).not.toEqual(null);
+               // expect players in room to be user ids
+               var account1 = Meteor.users.findOne({_id: room.player1});
+               var account2 = Meteor.users.findOne({_id: room.player2});
+               expect(account1).not.toEqual(null);
+               expect(account2).not.toEqual(null);
 
-            // expect one player in room to be the oldest
+               expect(account1).not.toEqual("bot");
+               expect(account2).not.toEqual("bot");
+
+               // expect one player in room to be the oldest
+           });
+
+        it("should put the oldest in a room with a bot (100% bot)", function () {
+            var unitUserId = Meteor.users.findOne({username: "unitUser1"})._id;
+            Meteor.call('match', 100);
+            var room = Meteor.call('findRoom', unitUserId);
+            expect(room.player2).toEqual("bot");
         });
 
-        it("should be able to be called multiple time to setup rooms", function () {
-            var beforeCount = Rooms.find().count();
-            var beforeWaitingCount = Waiting.find().count();
+        it("should be able to be called multiple time to setup rooms (0% bot)",
+           function () {
+               var beforeCount = Rooms.find().count();
+               var beforeWaitingCount = Waiting.find().count();
 
-            Meteor.call('match', 0);
-            Meteor.call('match', 0);
-            Meteor.call('match', 0);
+               Meteor.call('match', 0);
+               Meteor.call('match', 0);
+               Meteor.call('match', 0);
 
-            var afterCount = Rooms.find().count();
-            var afterWaitingCount = Waiting.find().count();
-            expect(afterCount).toEqual(beforeCount + 3);
-            expect(afterWaitingCount).toEqual(beforeWaitingCount - 6);
-        });
+               var afterCount = Rooms.find().count();
+               var afterWaitingCount = Waiting.find().count();
+               expect(afterCount).toEqual(beforeCount + 3);
+               expect(afterWaitingCount).toEqual(beforeWaitingCount - 6);
+           });
     });
 
     describe("findRoom", function () {
