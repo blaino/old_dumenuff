@@ -63,13 +63,18 @@ Meteor.methods({
         if (!matchWithBot) {
             // pick random from rest, remove
             var remaining = Waiting.find({}).fetch();
-            var count = remaining.length;
-            var index = Math.floor(Math.random() * count);
-            var randomSelection = remaining[index];
-            Waiting.remove({player: randomSelection.player});
+            if (remaining.length > 0) {
+                var count = remaining.length;
+                var index = Math.floor(Math.random() * count);
+                var randomSelection = remaining[index];
+                Waiting.remove({player: randomSelection.player});
 
-            // create a room with oldest and the random selection
-            room = {player1: oldest.player, player2: randomSelection.player};
+                // create a room with oldest and the random selection
+                room = {player1: oldest.player, player2: randomSelection.player};
+            } else {
+                // but if there isn't anyone available, assign to bot
+                room = {player1: oldest.player, player2: "bot"};
+            }
         } else {
             room = {player1: oldest.player, player2: "bot"};
         };
@@ -129,6 +134,7 @@ Meteor.methods({
         var room = Meteor.call('findRoom', playerId);
         var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
         var winnerPair = Meteor.call('getWinner', room, otherPlayerId, selection);
+        console.log('winnerPair', winnerPair);
         Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
     }
 });
