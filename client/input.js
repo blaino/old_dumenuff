@@ -8,20 +8,21 @@ Template.footer.events({
                 var messageText = $('.input-box_text').val();
                 var userId = Meteor.userId();
 
-                Meteor.call(
-                    'newMessage',
-                    // Human
-                    Meteor.users.findOne({_id: userId}),
-                    {
-                        text: messageText,
-                        channel: Session.get('channel')
-                    }
-                );
-                $('.input-box_text').val("");
-
                 Meteor.call('findRoom', userId, function (error, room) {
                     if (!error) {
                         console.log('room', room);
+                        Meteor.call(
+                            'newMessage',
+                            // Human
+                            Meteor.users.findOne({_id: userId}),
+                            {
+                                text: messageText,
+                                channel: room._id
+                            }
+                        );
+
+                        $('.input-box_text').val("");
+
                         if (room.player2 == "bot") {
                             // TODO: pull out into a function???
                             Meteor.call('reply', messageText, function (error, result) {
@@ -34,7 +35,7 @@ Template.footer.events({
                                         Meteor.users.findOne({username: "player"}),
                                         {
                                             text: result,
-                                            channel: Session.get('channel')
+                                            channel: room._id
                                         }
                                     );
                                 }

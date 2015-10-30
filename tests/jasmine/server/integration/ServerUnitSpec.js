@@ -151,21 +151,21 @@ describe('methods', function () {
             room.player2 = "bot"; // Having to overwrite is lame
             var selectee = room.player2;
             var selection = "bot";
-            var winner = Meteor.call('getWinner', room, selectee, selection);
+            var winner = Meteor.call('getWinner', room, selectee, selection)[0];
             expect(winner).toEqual(room.player1);
         });
 
         it("returns id of player that correctly selects human", function () {
             var selectee = room.player2;
             var selection = "human";
-            var winner = Meteor.call('getWinner', room, selectee, selection);
+            var winner = Meteor.call('getWinner', room, selectee, selection)[0];
             expect(winner).toEqual(room.player1);
         });
 
         it("returns player that fooled human", function () {
             var selectee = room.player2;
             var selection = "bot";
-            var winner = Meteor.call('getWinner', room, selectee, selection);
+            var winner = Meteor.call('getWinner', room, selectee, selection)[0];
             expect(winner).toEqual(room.player2);
         });
 
@@ -297,6 +297,68 @@ describe('methods', function () {
 
             Meteor.call('findRoom', bsId, function (error, room) {
                 expect(error).toBeDefined();
+            });
+        });
+
+    });
+
+    describe("getOtherPlayer", function () {
+        beforeEach(function () {
+            setupPlayersInWaiting(2);
+            Meteor.call('match', 0);
+        });
+
+        afterEach(function () {
+            tearDownPlayersAndRooms(2);
+        });
+
+        it("should return a different player in the same room", function () {
+            var user = Meteor.users.findOne({username: "unitUser1"});
+            var userid = user._id;
+            var room = Meteor.call('findRoom', userid);
+
+            var otherPlayerId = Meteor.call('getOtherPlayer', userid);
+            var otherPlayerRoom = Meteor.call('findRoom', otherPlayerId);
+
+            expect(otherPlayerId).not.toEqual(userid);
+            expect(room).toEqual(otherPlayerRoom);
+        });
+    });
+
+    describe("updateWinnerLoserScore", function () {
+
+        describe("with two humans", function () {
+
+            beforeEach(function () {
+                setupPlayersInWaiting(2);
+                Meteor.call('match', 0);
+            });
+
+            afterEach(function () {
+                tearDownPlayersAndRooms(2);
+            });
+
+            it("fooled should lose a point, fooler should gain a point", function () {
+                var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
+                var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
+                console.log('otherPlayerId', otherPlayerId);
+
+                // Initialize score (still sucks)
+                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+
+                var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
+                console.log('beforeScorePlayer1', beforeScorePlayer1);
+
+                var beforeScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
+
+
+                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+
+                var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
+                var afterScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
+
+                expect(afterScorePlayer1).toEqual(beforeScorePlayer1 - 1);
+                expect(afterScorePlayer2).toEqual(beforeScorePlayer2 + 1);
             });
         });
 

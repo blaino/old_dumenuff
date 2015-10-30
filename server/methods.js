@@ -28,18 +28,18 @@ Meteor.methods({
         var loserScore = Scores.findOne({player: loserId});
 
         if (winnerScore) {
-            console.log('updating winner');
+            //console.log('updating winner');
             Scores.update({player: winnerId}, {$inc: {score: 1}});
         } else {
-            console.log('adding winner to Score with score 1');
+            //console.log('adding winner to Score with score 1');
             Scores.insert({player: winnerId, score: 1});
         }
 
         if (loserScore) {
-            console.log('updating loser');
+            //console.log('updating loser');
             Scores.update({player: loserId}, {$inc: {score: -1}});
         } else {
-            console.log('adding loser to Score with score -1');
+            //console.log('adding loser to Score with score -1');
             Scores.insert({player: loserId, score: -1});
         }
     },
@@ -104,15 +104,31 @@ Meteor.methods({
         };
 
         if (selection === "human" && selectee !== "bot") {
-            return selector;
+            return [selector, selectee];
         };
 
         if (selection === "bot" && selectee == "bot") {
-            return selector;
+            return [selector, selectee];
         };
 
         if (selection == "bot" && selectee !== "bot") {
-            return selectee;
+            return [selectee, selector];
         };
+    },
+
+    getOtherPlayer: function(playerId) {
+        var room = Meteor.call('findRoom', playerId);
+        if (room.player1 != playerId) {
+            return room.player1;
+        } else {
+            return room.player2;
+        }
+    },
+
+    updateWinnerLoserScore: function(playerId, selection) {
+        var room = Meteor.call('findRoom', playerId);
+        var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
+        var winnerPair = Meteor.call('getWinner', room, otherPlayerId, selection);
+        Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
     }
 });
