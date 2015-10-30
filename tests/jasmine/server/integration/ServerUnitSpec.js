@@ -380,6 +380,50 @@ describe('methods', function () {
             });
         });
 
+        describe("with a bot", function () {
+
+            beforeEach(function () {
+                setupPlayersInWaiting(1);
+                Meteor.call('match', 100);
+            });
+
+            afterEach(function () {
+                tearDownPlayersAndRooms(1);
+            });
+
+            it("player's score should go up by one after selecting bot", function () {
+                var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
+
+                // Initialize score (still sucks)
+                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+
+                var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
+
+                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+
+                var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
+
+                expect(afterScorePlayer1).toEqual(beforeScorePlayer1 + 1);
+            });
+
+            it("player's score should go down by one after selecting human", function () {
+                var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
+
+                // Initialize score (still sucks)
+                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+
+                var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
+
+                Meteor.call('updateWinnerLoserScore', playerId, "human");
+
+                var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
+
+                expect(afterScorePlayer1).toEqual(beforeScorePlayer1 - 1);
+            });
+
+        });
+
+
     });
 
 });
