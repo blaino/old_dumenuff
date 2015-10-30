@@ -22,10 +22,10 @@ Meteor.methods({
         };
     },
 
-    matchPlayers: function () {
+    matchPlayers: function (percentBot) {
         var waiting = Waiting.find({}).fetch().length;
         while (waiting > 0) {
-            Meteor.call('match');
+            Meteor.call('match', percentBot);
             waiting = Waiting.find({}).fetch().length;
         };
     },
@@ -45,7 +45,7 @@ Meteor.methods({
             Meteor.call('findRoom', user._id, function (error, room) {
                 if (room) {
                     Factory.define('message', Messages, {
-                        text: "A first message for" + user.username,
+                        text: "A first message for " + user.username,
                         user: user._id,
                         timestamp: Date.now(),
                         channel: room._id

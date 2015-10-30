@@ -36,7 +36,7 @@ describe('Integration test', function () {
     //     expect(numMessages).toEqual(numPlayers);
     // });
 
-    it('should change the score when bot button is clicked', function () {
+    xit('should change the score when bot button is clicked', function () {
         var user = Meteor.users.findOne({username: "seedUser4"});
         var userId = user._id;
         var beforeScore;

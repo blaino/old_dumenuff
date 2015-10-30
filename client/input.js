@@ -6,11 +6,12 @@ Template.footer.events({
             if (charCode == 13) {
                 e.stopPropagation();
                 var messageText = $('.input-box_text').val();
+                var userId = Meteor.userId();
 
                 Meteor.call(
                     'newMessage',
                     // Human
-                    Meteor.users.findOne({_id: Meteor.userId()}),
+                    Meteor.users.findOne({_id: userId}),
                     {
                         text: messageText,
                         channel: Session.get('channel')
@@ -18,21 +19,28 @@ Template.footer.events({
                 );
                 $('.input-box_text').val("");
 
-
-                Meteor.call('reply', messageText, function (error, result) {
-                    if (error) {
-                        console.log('error');
-                    } else {
-                        Meteor.call(
-                            'newMessage',
-                            // Bot
-                            Meteor.users.findOne({username: "player"}),
-                            {
-                                text: result,
-                                channel: Session.get('channel')
-                            }
-                        );
-                    }
+                Meteor.call('findRoom', userId, function (error, room) {
+                    if (!error) {
+                        console.log('room', room);
+                        if (room.player2 == "bot") {
+                            // TODO: pull out into a function???
+                            Meteor.call('reply', messageText, function (error, result) {
+                                if (error) {
+                                    console.log('error');
+                                } else {
+                                    Meteor.call(
+                                        'newMessage',
+                                        // Bot
+                                        Meteor.users.findOne({username: "player"}),
+                                        {
+                                            text: result,
+                                            channel: Session.get('channel')
+                                        }
+                                    );
+                                }
+                            });
+                        };
+                    };
                 });
 
                 return false;
