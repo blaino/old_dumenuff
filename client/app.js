@@ -60,3 +60,11 @@ Template.header.helpers({
         }
     }
 });
+
+Tracker.autorun(function(){
+    if (Meteor.loggingIn()) {
+        console.log('logging in');
+        // call checkReady()
+        Meteor.call('readyGame');
+    };
+});

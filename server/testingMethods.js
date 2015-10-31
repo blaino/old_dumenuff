@@ -72,6 +72,18 @@ Meteor.methods({
     readyGame: function () {
         Game.update({}, {$set: {state: "Readying"}});
         // set timeout to call startGame()
+        var timerId;
+
+        function decReadyTime () {
+            Game.update({}, {$inc: {readyTime: -1}});
+            var game = Game.findOne({});
+            if (game.readyTime <= 0) {
+                Meteor.clearInterval(timerId);
+                Meteor.call('startGame');
+            }
+        };
+
+        timerId = Meteor.setInterval(decReadyTime, 1000);
     },
 
     startGame: function () {
@@ -85,6 +97,7 @@ Meteor.methods({
 
     endGame: function () {
         Game.update({}, {$set: {state: "Ended"}}); // Maybe add winner: username?
+        // Determine winner, sort and display results or something
         Rooms.remove({});
         Scores.remove({});
         Waiting.remove({});
