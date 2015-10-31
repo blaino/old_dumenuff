@@ -125,14 +125,16 @@ body {
 }
 
 /* line 19, ../tests/sass/components/_header.scss */
-.channel-menu_name {
+.game-title {
   display: inline-block;
   padding: 0 .5rem 0 1.5rem;
   color: #555459;
-  font-size: 1.4rem;
+  font-size: 2.4rem;
   font-weight: 900;
   line-height: 100px;
   cursor: pointer;
+  float: right;
+  padding-right: 100px;
 }
 
 /* line 29, ../tests/sass/components/_header.scss */
