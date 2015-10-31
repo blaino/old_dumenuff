@@ -1,29 +1,22 @@
 describe('methods', function () {
 
-   // beforeEach(function () {
-        var unitUser = Meteor.users.findOne({username: "unitUser"});
-        if (!unitUser) {
-            Accounts.createUser({
-                username: "unitUser",
-                email: "unitUser@example.com",
-                password: "password"
-            });
-        }
+    var unitUser = Meteor.users.findOne({username: "unitUser"});
+    if (!unitUser) {
+        Accounts.createUser({
+            username: "unitUser",
+            email: "unitUser@example.com",
+            password: "password"
+        });
+    }
 
-        var unitUserLoser = Meteor.users.findOne({username: "unitUserLoser"});
-        if (!unitUserLoser) {
-            Accounts.createUser({
-                username: "unitUserLoser",
-                email: "unitUserLoser@example.com",
-                password: "password"
-            });
-        }
-
-    //});
-
-    // afterEach(function () {
-    //    Meteor.users.remove({username: "unitUser"});
-    //});
+    var unitUserLoser = Meteor.users.findOne({username: "unitUserLoser"});
+    if (!unitUserLoser) {
+        Accounts.createUser({
+            username: "unitUserLoser",
+            email: "unitUserLoser@example.com",
+            password: "password"
+        });
+    }
 
     describe('newMessage', function () {
         it("should add a message", function () {
@@ -175,6 +168,9 @@ describe('methods', function () {
         it("should put timestamped player in the Waiting collection", function () {
             var player = Meteor.users.findOne({username: "unitUser"});
             var beforeCount = Waiting.find().count();
+
+            console.log('player', player);
+
             Meteor.call('addPlayer', player._id);
             var afterCount = Waiting.find().count();
             expect(afterCount).toEqual(beforeCount + 1);
@@ -188,6 +184,7 @@ describe('methods', function () {
     function setupPlayersInWaiting(numPlayers) {
         var player;
 
+        // Meteor.users.remove({});
         Rooms.remove({});
         for (i = 1; i <= numPlayers; i++) {
             if (!Meteor.users.findOne({username: "unitUser" + String(i)})) {
@@ -422,6 +419,28 @@ describe('methods', function () {
             });
 
         });
+    });
+
+    describe("countLogins", function () {
+        beforeEach(function () {
+            setupPlayersInWaiting(3);
+        });
+
+        afterEach(function () {
+            tearDownPlayersAndRooms(3);
+        });
+
+        it("should return 0 before anyone has logged on", function () {
+            var count = Meteor.call('countLogins');
+            expect(count).toEqual(0);
+        });
+
+        // This won't work on the server:
+        // it("should return 1 after a single user logs on", function () {
+        //     Meteor.loginWithPassword('unitUser1', 'password');
+        //     var count = Meteor.call('countLogins');
+        //     expect(count).toEqual(1);
+        // });
 
 
     });

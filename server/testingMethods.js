@@ -4,6 +4,7 @@ Meteor.methods({
         Channels.remove({});
         Meteor.users.remove({});
         Rooms.remove({});
+        Scores.remove({});
         Waiting.remove({});
     },
 
@@ -54,5 +55,10 @@ Meteor.methods({
                 };
             });
         });
+    },
+
+    countLogins: function () {
+        var users = Meteor.users.find({'services.resume': {$exists: true}});
+        return users.count();
     }
 });
