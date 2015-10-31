@@ -60,5 +60,33 @@ Meteor.methods({
     countLogins: function () {
         var users = Meteor.users.find({'services.resume': {$exists: true}});
         return users.count();
+    },
+
+    // Called on startup
+    newGame: function () {
+        Game.remove({});
+        // setup config file? or config page?
+        Game.insert({state: "Waiting", readyTime: 10, gameTime: 30, numPlayers: 3, numReady: 0});
+    },
+
+    readyGame: function () {
+        Game.update({}, {$set: {state: "Readying"}});
+        // set timeout to call startGame()
+    },
+
+    startGame: function () {
+        Game.update({}, {$set: {state: "Started"}});
+        Meteor.call('matchPlayers', 50);
+        Meteor.call('createChannels');
+        // set timeout to call endGame()
+        // meanwhile, update gameTime so front end can show it
+        // in 1s increments?
+    },
+
+    endGame: function () {
+        Game.update({}, {$set: {state: "Ended"}}); // Maybe add winner: username?
+        Rooms.remove({});
+        Scores.remove({});
+        Waiting.remove({});
     }
 });

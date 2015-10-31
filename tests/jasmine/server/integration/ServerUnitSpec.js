@@ -444,4 +444,36 @@ describe('methods', function () {
         // });
     });
 
+    describe("newGame", function () {
+        it("should add one element to Game collection", function () {
+            Meteor.call('newGame');
+            var countAfter = Game.find({}).count();
+            expect(countAfter).toEqual(1);
+        });
+    });
+
+    describe("readyGame", function () {
+        it("should change state to Readying", function () {
+            Meteor.call('readyGame');
+            var state = Game.findOne({}).state;
+            expect(state).toEqual("Readying");
+        });
+    });
+
+    describe("startGame", function () {
+        it("should change state to Started", function () {
+            Meteor.call('startGame');
+            var state = Game.findOne({}).state;
+            expect(state).toEqual("Started");
+        });
+    });
+
+    describe("endGame", function () {
+        it("should change state to Ended", function () {
+            Meteor.call('endGame');
+            var state = Game.findOne({}).state;
+            expect(state).toEqual("Ended");
+        });
+    });
+
 });

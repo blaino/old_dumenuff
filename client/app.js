@@ -40,3 +40,23 @@ Template.footer.helpers({
         return score;
     }
 });
+
+Template.header.helpers({
+    gameState: function () {
+        var game = Game.findOne({});
+        if (game) {
+            var state = game.state;
+            if (state == "Readying") {
+                return "Game starts in " + game.readyTime + " seconds";
+            } else if (state == "Started") {
+                return "Game ends in " + game.gameTime + " seconds";
+            } else if (state == "Ended") {
+                return "Game over";
+            } else {
+                return "Waiting for x players";
+            }
+        } else {
+            return "Waiting for x players";
+        }
+    }
+});

@@ -19,3 +19,7 @@ Meteor.publish('scores', function () {
 Meteor.publish('rooms', function () {
     return Scores.find();
 });
+
+Meteor.publish('game', function () {
+    return Game.find();
+});
