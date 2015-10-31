@@ -31,20 +31,21 @@ describe('methods', function () {
     });
 
     describe("reply", function () {
-        it("should return a string", function () {
-            var replyFromBot = Meteor.call('reply', "Hello there");
-            expect(typeof replyFromBot).toEqual('string');
-        });
+        // Commenting to save time:
+        // it("should return a string", function () {
+        //     var replyFromBot = Meteor.call('reply', "Hello there");
+        //     expect(typeof replyFromBot).toEqual('string');
+        // });
 
         it("response time should vary", function () {
             var firstReplyTime, secondReplyTime;
             var timeBefore = new Date().getTime();
-            var replyFromBot = Meteor.call('reply', "Hello there");
+            var replyFromBot = Meteor.call('reply', "Hi");
             var timeAfter = new Date().getTime();
             firstReplyTime = timeAfter - timeBefore;
 
             timeBefore = new Date().getTime();
-            replyFromBot = Meteor.call('reply', "Hello there");
+            replyFromBot = Meteor.call('reply', "Hi");
             timeAfter = new Date().getTime();
             secondReplyTime = timeAfter - timeBefore;
 
@@ -441,8 +442,6 @@ describe('methods', function () {
         //     var count = Meteor.call('countLogins');
         //     expect(count).toEqual(1);
         // });
-
-
     });
 
 });
