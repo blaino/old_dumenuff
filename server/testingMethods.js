@@ -59,14 +59,23 @@ Meteor.methods({
 
     countLogins: function () {
         var users = Meteor.users.find({'services.resume': {$exists: true}});
+        console.log('users.count()', users.count());
         return users.count();
+    },
+
+    checkReady: function () {
+        var numPlayers = Game.findOne({}).numPlayers;
+        var loginCount = Meteor.call('countLogins');
+        console.log('loginCount', loginCount);
+        console.log('numPlayers', numPlayers);
+        return (loginCount == numPlayers);
     },
 
     // Called on startup
     newGame: function () {
         Game.remove({});
         // setup config file? or config page?
-        Game.insert({state: "Waiting", readyTime: 10, gameTime: 30, numPlayers: 3, numReady: 0});
+        Game.insert({state: "Waiting", readyTime: 10, gameTime: 30, numPlayers: 2, numReady: 0});
     },
 
     readyGame: function () {

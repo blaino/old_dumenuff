@@ -62,9 +62,14 @@ Template.header.helpers({
 });
 
 Tracker.autorun(function(){
-    if (Meteor.loggingIn()) {
-        console.log('logging in');
-        // call checkReady()
-        Meteor.call('readyGame');
+    if (Meteor.userId()) {
+        Meteor.call('addPlayer', Meteor.userId());
+        Meteor.call('checkReady', function (error, isReady) {
+            console.log('call to checkReady succeeded');
+            if (isReady) {
+                console.log('calling readyGame()');
+                Meteor.call('readyGame');
+            };
+        });
     };
 });
