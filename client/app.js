@@ -17,6 +17,15 @@ Template.registerHelper("timestampToTime", function (timestamp) {
 Template.listings.helpers({
     channels: function () {
         return Channels.find();
+    },
+    buttonsDisabled: function () {
+        var game = Game.findOne({});
+        if (game) {
+            var state = game.state;
+            if (state != "Started") {
+                return true;
+            };
+        };
     }
 });
 
