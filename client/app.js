@@ -53,6 +53,7 @@ Template.footer.helpers({
 Template.header.helpers({
     gameState: function () {
         var game = Game.findOne({});
+        var waitingFor = game.numPlayers - game.numReady;
         if (game) {
             var state = game.state;
             if (state == "Readying") {
@@ -62,7 +63,7 @@ Template.header.helpers({
             } else if (state == "Ended") {
                 return "Game over";
             } else {
-                return "Waiting for x players";
+                return "Waiting for " + waitingFor + " players";
             }
         } else {
             return "Waiting for x players";

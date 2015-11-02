@@ -52,6 +52,7 @@ Meteor.methods({
 
     addPlayer: function (playerId) {
         Waiting.insert({player: playerId, timeEntered: Date.now()});
+        Game.update({}, {$inc: {numReady: 1}});
     },
 
     match: function (percentBot) {
