@@ -80,7 +80,6 @@ Meteor.methods({
 
     readyGame: function () {
         Game.update({}, {$set: {state: "Readying"}});
-        // set timeout to call startGame()
         var timerId;
 
         function decReadyTime () {
@@ -97,11 +96,21 @@ Meteor.methods({
 
     startGame: function () {
         Game.update({}, {$set: {state: "Started"}});
+        var timerId;
+
         Meteor.call('matchPlayers', 50);
         Meteor.call('createChannels');
-        // set timeout to call endGame()
-        // meanwhile, update gameTime so front end can show it
-        // in 1s increments?
+
+        function decGameTime () {
+            Game.update({}, {$inc: {gameTime: -1}});
+            var game = Game.findOne({});
+            if (game.gameTime <= 0) {
+                Meteor.clearInterval(timerId);
+                Meteor.call('endGame');
+            }
+        };
+
+        timerId = Meteor.setInterval(decGameTime, 1000);
     },
 
     endGame: function () {
