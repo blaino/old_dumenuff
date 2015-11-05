@@ -4,7 +4,6 @@ Meteor.startup(function() {
     Meteor.call('cleanUp');
     // Meteor.call('addStartingPlayers', 4);
     // Meteor.call('matchPlayers', 50);
-    // Meteor.call('createChannels');
     // Meteor.call('postMessages');
 
     /* Integ test

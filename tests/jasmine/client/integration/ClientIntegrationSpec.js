@@ -13,11 +13,11 @@ describe('Integration test', function () {
         Meteor.call('cleanUp', function () {
             Meteor.call('addStartingPlayers', numPlayers, function () {
                 Meteor.call('matchPlayers', function () {
-                    Meteor.call('createChannels', function () {
+                    //Meteor.call('createChannels', function () {
                         Meteor.call('postMessages', function () {
                             done();
                         });
-                    });
+                    //});
                 });
             });
         });

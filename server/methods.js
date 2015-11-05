@@ -87,7 +87,11 @@ Meteor.methods({
         };
 
         // add it to Rooms
-        Rooms.insert(room);
+        Rooms.insert(room, function (error, roomId) {
+            Channels.insert({name: roomId});
+        });
+
+        console.log('room', Rooms.find({}).fetch());
     },
 
     findRoom: function (userId) {
@@ -144,9 +148,7 @@ Meteor.methods({
     updateWinnerLoserScore: function(playerId, selection) {
         var room = Meteor.call('findRoom', playerId);
         var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
-        console.log('otherPlayerId', otherPlayerId);
         var winnerPair = Meteor.call('getWinner', room, otherPlayerId, selection);
-        console.log('winnerPair', winnerPair);
         Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
     }
 });

@@ -21,7 +21,6 @@ describe('Integration test', function () {
     Meteor.call('cleanUp');
     Meteor.call('addStartingPlayers', numPlayers);
     Meteor.call('matchPlayers');
-    Meteor.call('createChannels');
     Meteor.call('postMessages');
 
     it('should have ' + (numPlayers / 2) + ' channels', function () {

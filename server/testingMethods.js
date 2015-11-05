@@ -31,15 +31,6 @@ Meteor.methods({
         };
     },
 
-    createChannels: function () {
-        var rooms = Rooms.find({});
-        rooms.forEach(function (room) {
-            Channels.insert({
-                name: room._id
-            });
-        });
-    },
-
     postMessages: function () {
         users = Meteor.users.find({});
         users.forEach(function (user) {
@@ -59,15 +50,12 @@ Meteor.methods({
 
     countLogins: function () {
         var users = Meteor.users.find({'services.resume': {$exists: true}});
-        console.log('users.count()', users.count());
         return users.count();
     },
 
     checkReady: function () {
         var numPlayers = Game.findOne({}).numPlayers;
         var loginCount = Meteor.call('countLogins');
-        console.log('loginCount', loginCount);
-        console.log('numPlayers', numPlayers);
         return (loginCount == numPlayers);
     },
 
@@ -75,7 +63,7 @@ Meteor.methods({
     newGame: function () {
         Game.remove({});
         // setup config file? or config page?
-        Game.insert({state: "Waiting", readyTime: 10, gameTime: 30, numPlayers: 2, numReady: 0});
+        Game.insert({state: "Waiting", readyTime: 10, gameTime: 100, numPlayers: 2, numReady: 0});
     },
 
     readyGame: function () {
@@ -99,7 +87,6 @@ Meteor.methods({
         var timerId;
 
         Meteor.call('matchPlayers', 50);
-        Meteor.call('createChannels');
 
         function decGameTime () {
             Game.update({}, {$inc: {gameTime: -1}});
