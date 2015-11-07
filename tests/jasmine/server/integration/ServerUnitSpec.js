@@ -59,21 +59,6 @@ describe('methods', function () {
         var winner = Meteor.users.findOne({username: "unitUser"});
         var loser = Meteor.users.findOne({username: "unitUserLoser"});
 
-        it("should add score to Scores if one for the winning player does not yet exist",
-           function () {
-               Accounts.createUser({
-                   username: "thisUnitUser",
-                   email: "thisUnitUser@example.com",
-                   password: "password"
-               });
-               var beforeCount = Scores.find().count();
-               var player = Meteor.users.findOne({username: "thisUnitUser"});
-               Meteor.call('updateScore', player._id);
-               var afterCount = Scores.find().count();
-               expect(afterCount).toEqual(beforeCount + 1);
-               Meteor.users.remove({username: "thisUnitUser"});
-           });
-
         it("should set score to one for first time update", function () {
             Meteor.call('updateScore', winner._id);
             var afterScore = Scores.findOne({player: winner._id});
@@ -88,7 +73,7 @@ describe('methods', function () {
             expect(afterScore).toEqual(beforeScore + 1);
         });
 
-        it("should add score to Scores if one for the loser does not yet exist",
+        it("should add score to Scores if they don't yet exist",
            function () {
                Accounts.createUser({
                    username: "thisUnitUserWinner",
@@ -169,8 +154,6 @@ describe('methods', function () {
         it("should put timestamped player in the Waiting collection", function () {
             var player = Meteor.users.findOne({username: "unitUser"});
             var beforeCount = Waiting.find().count();
-
-            console.log('player', player);
 
             Meteor.call('addPlayer', player._id);
             var afterCount = Waiting.find().count();
@@ -357,13 +340,11 @@ describe('methods', function () {
             it("fooled should lose a point, fooler should gain a point", function () {
                 var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
                 var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
-                console.log('otherPlayerId', otherPlayerId);
 
                 // Initialize score (still sucks)
                 Meteor.call('updateWinnerLoserScore', playerId, "bot");
 
                 var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
-                console.log('beforeScorePlayer1', beforeScorePlayer1);
 
                 var beforeScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
 
@@ -473,6 +454,36 @@ describe('methods', function () {
             Meteor.call('endGame');
             var state = Game.findOne({}).state;
             expect(state).toEqual("Ended");
+        });
+    });
+
+    describe("matchPlayers", function () {
+        it("should match every player when threshold is 1", function () {
+            setupPlayersInWaiting(5);
+            Meteor.call('matchPlayers', 0, 1, 3000);
+            var waiting = Waiting.find({}).fetch().length;
+            expect(waiting).toEqual(0);
+            tearDownPlayersAndRooms(5);
+        });
+
+        it("should call match 3x when threshold is 3 and 5 players", function () {
+            setupPlayersInWaiting(5);
+            spyOn(Meteor, 'call').and.callThrough();
+            Meteor.call('matchPlayers', 0, 3, 10);
+            expect(Meteor.call).toHaveBeenCalledWith('match', 0);
+            // One for the original call to matchPlayers, 3 calls to match
+            expect(Meteor.call.calls.count()).toEqual(4);
+            tearDownPlayersAndRooms(5);
+        });
+
+        it("should call match 1x when threshold is 1 and 2 players", function () {
+            setupPlayersInWaiting(2);
+            spyOn(Meteor, 'call').and.callThrough();
+            Meteor.call('matchPlayers', 0, 1, 10);
+            expect(Meteor.call).toHaveBeenCalledWith('match', 0);
+            // One for the original call to matchPlayers, 2 calls to match
+            expect(Meteor.call.calls.count()).toEqual(2);
+            tearDownPlayersAndRooms(2);
         });
     });
 

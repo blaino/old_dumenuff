@@ -17,13 +17,15 @@ describe('Collections', function () {
 });
 
 describe('Integration test', function () {
+    console.log('=== Start: Integration Test ===');
     var numPlayers = 4;
+    var percentBot = 0;
     Meteor.call('cleanUp');
     Meteor.call('addStartingPlayers', numPlayers);
-    Meteor.call('matchPlayers');
+    Meteor.call('matchPlayers', percentBot, 3, 3000);
     Meteor.call('postMessages');
 
-    it('should have ' + (numPlayers / 2) + ' channels', function () {
+    it('should have ' + (numPlayers / 2) + ' channels (0% bot)', function () {
         var numChannels = Channels.find({}).count();
         expect(numChannels).toEqual(numPlayers / 2);
     });
@@ -44,5 +46,5 @@ describe('Integration test', function () {
 
         expect(beforeScore).not.toEqual(afterScore);
     });
-
+    console.log('=== End: Integration Test ===');
 });

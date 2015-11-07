@@ -90,8 +90,6 @@ Meteor.methods({
         Rooms.insert(room, function (error, roomId) {
             Channels.insert({name: roomId});
         });
-
-        console.log('room', Rooms.find({}).fetch());
     },
 
     findRoom: function (userId) {

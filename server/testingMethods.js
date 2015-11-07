@@ -23,11 +23,29 @@ Meteor.methods({
         };
     },
 
-    matchPlayers: function (percentBot) {
+    matchPlayersOld: function (percentBot) {
         var waiting = Waiting.find({}).fetch().length;
         while (waiting > 0) {
             Meteor.call('match', percentBot);
             waiting = Waiting.find({}).fetch().length;
+        };
+    },
+
+    matchPlayers: function (percentBot, threshold, pauseTime) {
+        var waiting = Waiting.find({}).fetch().length;
+        while (waiting >= threshold) {
+            Meteor.call('match', percentBot);
+            waiting = Waiting.find({}).fetch().length;
+        };
+        waiting = Waiting.find({}).fetch().length;
+        console.log('waiting', waiting);
+        if (waiting > 0) {
+            Meteor._sleepForMs(pauseTime);
+            while (waiting > 0) {
+                console.log('calling match after delay with ', Waiting.find({}).fetch());
+                Meteor.call('match', percentBot);
+                waiting = Waiting.find({}).fetch().length;
+            };
         };
     },
 
