@@ -1,33 +1,31 @@
-// TODO: get rid of this
-
-describe('Collections', function () {
-
-    // Valid in prime time, but not with a bunch of seeder data:
-    // describe('Channels', function () {
-    //     it("on startup there should not be any", function () {
-    //         expect(Channels.find().count()).toEqual(0);
-    //     });
-    // });
-
-    // describe('Messages', function () {
-    //     it("on startup there should not be any", function () {
-    //         expect(Messages.find().count()).toEqual(0);
-    //     });
-    // });
-});
-
 describe('Integration test', function () {
     console.log('=== Start: Integration Test ===');
-    var numPlayers = 4;
-    var percentBot = 0;
+
+    var percentBot = 100,
+        readyTime = 1,
+        gameTime = 100,
+        numPlayers = 4;
+
     Meteor.call('cleanUp');
+
+    Meteor.call('newGame', readyTime, gameTime, numPlayers, percentBot);
+
+    // Simulate client-side adding of players (app.js)
     Meteor.call('addStartingPlayers', numPlayers);
-    Meteor.call('matchPlayers', percentBot, 3, 3000);
+
+    // Assume, for now, that checkReady() works (depends on counting logins)
+    Meteor.call('readyGame');
+
+    // Should start game after readyTime seconds
+    // Could have an expectation of called with 'startGame'
+    Meteor._sleepForMs(readyTime * 1000 * 4);  // This sucks
+
     Meteor.call('postMessages');
 
-    it('should have ' + (numPlayers / 2) + ' channels (0% bot)', function () {
+
+    it('should have ' + numPlayers + ' channels (100% bot)', function () {
         var numChannels = Channels.find({}).count();
-        expect(numChannels).toEqual(numPlayers / 2);
+        expect(numChannels).toEqual(numPlayers);
     });
 
     it('should have ' + numPlayers + ' messages', function () {
@@ -35,16 +33,13 @@ describe('Integration test', function () {
         expect(numMessages).toEqual(numPlayers);
     });
 
-    it('should change the score when updateScore() is called', function () {
-        var userId = Meteor.users.findOne({username: "seedUser4"})._id;
-
-        // First call initializes score. Rethink?
-        Meteor.call('updateScore', userId);
-        var beforeScore = Scores.findOne({player: userId}).score;
-        Meteor.call('updateScore', userId);
-        var afterScore = Scores.findOne({player: userId}).score;
-
-        expect(beforeScore).not.toEqual(afterScore);
+    it("should have the right score after 'a round'", function () {
+        player0 = Meteor.users.find({username: 'seedUser1'}).fetch()[0];
+        Meteor.call('updateWinnerLoserScore', player0._id, "bot");
+        var p0score = Scores.find({player: player0._id}).fetch()[0];
+        expect(p0score.score).toEqual(1);
     });
+
+
     console.log('=== End: Integration Test ===');
 });

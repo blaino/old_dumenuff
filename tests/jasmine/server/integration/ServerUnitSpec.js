@@ -427,7 +427,7 @@ describe('methods', function () {
 
     describe("newGame", function () {
         it("should add one element to Game collection", function () {
-            Meteor.call('newGame');
+            Meteor.call('newGame', 10, 100, 2, 50);
             var countAfter = Game.find({}).count();
             expect(countAfter).toEqual(1);
         });

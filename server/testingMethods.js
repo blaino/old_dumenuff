@@ -38,11 +38,9 @@ Meteor.methods({
             waiting = Waiting.find({}).fetch().length;
         };
         waiting = Waiting.find({}).fetch().length;
-        console.log('waiting', waiting);
         if (waiting > 0) {
             Meteor._sleepForMs(pauseTime);
             while (waiting > 0) {
-                console.log('calling match after delay with ', Waiting.find({}).fetch());
                 Meteor.call('match', percentBot);
                 waiting = Waiting.find({}).fetch().length;
             };
@@ -78,10 +76,11 @@ Meteor.methods({
     },
 
     // Called on startup
-    newGame: function () {
+    newGame: function (readyTime, gameTime, numPlayers, percentBot) {
         Game.remove({});
         // setup config file? or config page?
-        Game.insert({state: "Waiting", readyTime: 10, gameTime: 100, numPlayers: 2, numReady: 0});
+        Game.insert({state: "Waiting", readyTime: readyTime, gameTime: gameTime,
+                     numPlayers: numPlayers, percentBot: percentBot, numReady: 0});
     },
 
     readyGame: function () {
@@ -102,9 +101,10 @@ Meteor.methods({
 
     startGame: function () {
         Game.update({}, {$set: {state: "Started"}});
+        var percentBot = Game.findOne({}).percentBot;
         var timerId;
 
-        Meteor.call('matchPlayers', 50);
+        Meteor.call('matchPlayers', percentBot);
 
         function decGameTime () {
             Game.update({}, {$inc: {gameTime: -1}});

@@ -29,10 +29,10 @@ Meteor.methods({
             var winnerScore = Scores.findOne({player: winnerId});
 
             if (winnerScore) {
-                //console.log('updating winner');
+                // console.log('updating winner');
                 Scores.update({player: winnerId}, {$inc: {score: 1}});
             } else {
-                //console.log('adding winner to Score with score 1');
+                // console.log('adding winner to Score with score 1');
                 Scores.insert({player: winnerId, score: 1});
             };
         };
@@ -41,10 +41,10 @@ Meteor.methods({
             var loserScore = Scores.findOne({player: loserId});
 
             if (loserScore) {
-                //console.log('updating loser');
+                // console.log('updating loser');
                 Scores.update({player: loserId}, {$inc: {score: -1}});
             } else {
-                //console.log('adding loser to Score with score -1');
+                // console.log('adding loser to Score with score -1');
                 Scores.insert({player: loserId, score: -1});
             };
         };
