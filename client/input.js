@@ -65,8 +65,10 @@ Template.channel.events({
 Template.listings.events({
     'click #bot-button': function () {
         Meteor.call('updateWinnerLoserScore', Meteor.userId(), "bot");
+        // Meteor.call('rematch', Meteor.userId());
     },
     'click #human-button': function () {
         Meteor.call('updateWinnerLoserScore', Meteor.userId(), "human");
+        // Meteor.call('rematch', Meteor.userId());
     }
 });

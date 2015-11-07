@@ -1,9 +1,9 @@
 Meteor.methods({
     cleanUp: function () {
         Messages.remove({});
-        Channels.remove({});
         Meteor.users.remove({});
         Rooms.remove({});
+        Channels.remove({});
         Scores.remove({});
         Waiting.remove({});
     },
@@ -72,7 +72,10 @@ Meteor.methods({
     checkReady: function () {
         var numPlayers = Game.findOne({}).numPlayers;
         var loginCount = Meteor.call('countLogins');
-        return (loginCount == numPlayers);
+        var game = Game.findOne({});
+
+        // Ready when in Waiting and have right number of players
+        return (loginCount == numPlayers && game.state == 'Waiting');
     },
 
     // Called on startup

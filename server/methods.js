@@ -86,7 +86,7 @@ Meteor.methods({
             room = {player1: oldest.player, player2: "bot"};
         };
 
-        // add it to Rooms
+        // add channel
         Rooms.insert(room, function (error, roomId) {
             Channels.insert({name: roomId});
         });
@@ -148,5 +148,19 @@ Meteor.methods({
         var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
         var winnerPair = Meteor.call('getWinner', room, otherPlayerId, selection);
         Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
+    },
+
+    rematch: function (playerId) {
+        var room = Meteor.call('findRoom', playerId);
+
+        // Put both players (from room) in the Waiting queue
+        Waiting.insert({player: room.player1, timeEntered: Date.now()});
+        Waiting.insert({player: room.player2, timeEntered: Date.now()});
+        // Delete room, channels
+        Rooms.remove({});
+        Channels.remove({});
+        // call matchPlayers()
+        var percentBot = Game.findOne({}).percentBot;
+        Meteor.call('matchPlayers', percentBot);
     }
 });

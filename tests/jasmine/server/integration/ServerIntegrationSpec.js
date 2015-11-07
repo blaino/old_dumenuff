@@ -22,6 +22,7 @@ describe('Integration test', function () {
 
     Meteor.call('postMessages');
 
+    var player0 = Meteor.users.find({username: 'seedUser1'}).fetch()[0];
 
     it('should have ' + numPlayers + ' channels (100% bot)', function () {
         var numChannels = Channels.find({}).count();
@@ -34,11 +35,12 @@ describe('Integration test', function () {
     });
 
     it("should have the right score after 'a round'", function () {
-        player0 = Meteor.users.find({username: 'seedUser1'}).fetch()[0];
         Meteor.call('updateWinnerLoserScore', player0._id, "bot");
         var p0score = Scores.find({player: player0._id}).fetch()[0];
         expect(p0score.score).toEqual(1);
     });
+
+    // Meteor.call('rematch', player0._id);
 
 
     console.log('=== End: Integration Test ===');
