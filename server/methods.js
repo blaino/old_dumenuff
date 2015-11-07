@@ -2,6 +2,11 @@ Meteor.methods({
     newMessage: function (user, message) {
   	message.timestamp = Date.now();
         message.user = user;
+        if (user) {
+            message.text = user.username + ': ' + message.text;
+        } else {
+            message.text =  'player: ' + message.text;
+        };
         Messages.insert(message);
     },
 
