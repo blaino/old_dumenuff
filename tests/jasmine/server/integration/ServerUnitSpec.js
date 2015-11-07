@@ -168,7 +168,7 @@ describe('methods', function () {
     function setupPlayersInWaiting(numPlayers) {
         var player;
 
-        // Meteor.users.remove({});
+        Waiting.remove({});
         Rooms.remove({});
         for (i = 1; i <= numPlayers; i++) {
             if (!Meteor.users.findOne({username: "unitUser" + String(i)})) {
