@@ -48,10 +48,12 @@ Meteor.methods({
     },
 
     postMessages: function () {
-        users = Meteor.users.find({});
+        users = Meteor.users.find({}).fetch();
         users.forEach(function (user) {
             Meteor.call('findRoom', user._id, function (error, room) {
-                if (room) {
+                if (error) {
+                    console.log('postMessage() cannot find room: ', error);
+                } else {
                     Factory.define('message', Messages, {
                         text: "A first message for " + user.username,
                         user: user._id,
@@ -107,9 +109,10 @@ Meteor.methods({
         var game = Game.findOne({});
         var percentBot = game.percentBot;
         var timerId;
+        var threshold = 2;
+        var pauseTime = 6000;
 
-        Meteor.call('matchPlayers', percentBot, 1, 6000);
-        //Meteor.call('matchPlayers', percentBot);
+        Meteor.call('matchPlayers', percentBot, threshold, pauseTime);
 
         function decGameTime () {
             Game.update({}, {$inc: {gameTime: -1}});

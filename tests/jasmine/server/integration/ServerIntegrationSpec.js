@@ -18,7 +18,7 @@ describe('Integration test', function () {
 
     // Should start game after readyTime seconds
     // Could have an expectation of called with 'startGame'
-    Meteor._sleepForMs(readyTime * 1000 * 4);  // This sucks
+    Meteor._sleepForMs(readyTime * 1000 * 8);  // This sucks
 
     Meteor.call('postMessages');
 
