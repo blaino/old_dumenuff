@@ -172,7 +172,11 @@ Meteor.methods({
         Channels.remove({name: room._id});
 
         // call matchPlayers()
-        var percentBot = Game.findOne({}).percentBot;
-        Meteor.call('matchPlayers', percentBot);
+        var game = Game.findOne({});
+        var percentBot = game.percentBot;
+        var threshold = game.threshold;
+        var pauseTime = game.pauseTime;
+
+        Meteor.call('matchPlayers', percentBot, threshold, pauseTime);
     }
 });

@@ -487,4 +487,80 @@ describe('methods', function () {
         });
     });
 
+    describe("rematch", function () {
+
+        it("should call Waiting.insert twice if no bot", function () {
+            setupPlayersInWaiting(4);
+            Meteor.call('matchPlayers', 0, 1, 3000);
+            var waiting = Waiting.find({}).fetch().length;
+            expect(waiting).toEqual(0);
+
+            var aRoom = Rooms.findOne({});
+            var player = aRoom.player1;
+
+            spyOn(Waiting, 'insert');
+            Meteor.call('rematch', player);
+            expect(Waiting.insert.calls.count()).toEqual(2);
+
+            tearDownPlayersAndRooms(4);
+        });
+
+        it("should call Waiting.insert once if bot in room", function () {
+            setupPlayersInWaiting(4);
+            Meteor.call('matchPlayers', 100, 1, 3000);
+            var waiting = Waiting.find({}).fetch().length;
+            expect(waiting).toEqual(0);
+
+            var aRoom = Rooms.findOne({});
+            var player = aRoom.player1;
+
+            spyOn(Waiting, 'insert');
+            Meteor.call('rematch', player);
+            expect(Waiting.insert.calls.count()).toEqual(1);
+
+            tearDownPlayersAndRooms(4);
+        });
+
+        it("should remove 1 room, 1 channel", function () {
+            setupPlayersInWaiting(4);
+            Meteor.call('matchPlayers', 0, 1, 3000);
+            var waiting = Waiting.find({}).fetch().length;
+            expect(waiting).toEqual(0);
+
+            var aRoom = Rooms.findOne({});
+            var player = aRoom.player1;
+
+            spyOn(Rooms, 'remove');
+            spyOn(Channels, 'remove');
+            Meteor.call('rematch', player);
+            expect(Rooms.remove.calls.count()).toEqual(1);
+            expect(Channels.remove.calls.count()).toEqual(1);
+
+            tearDownPlayersAndRooms(4);
+        });
+
+        it("should call matchPlayers", function () {
+            setupPlayersInWaiting(4);
+            Meteor.call('matchPlayers', 0, 1, 3000);
+            var waiting = Waiting.find({}).fetch().length;
+            expect(waiting).toEqual(0);
+
+            var aRoom = Rooms.findOne({});
+            var player = aRoom.player1;
+
+            spyOn(Meteor, 'call').and.callThrough();
+
+            Meteor.call('rematch', player);
+
+            var game = Game.findOne({});
+            var percentBot = game.percentBot;
+            var threshold = game.threshold;
+            var pauseTime = game.pauseTime;
+
+            expect(Meteor.call).toHaveBeenCalledWith('matchPlayers', percentBot, threshold,
+                                                     pauseTime);
+        });
+
+    });
+
 });
