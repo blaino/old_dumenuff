@@ -18,7 +18,7 @@ Meteor.startup(function() {
     //     });
     // }
 
-    Meteor.call('newGame', 5, 300, 2, 50);
+    Meteor.call('newGame', 5, 300, 2, 100);
     Meteor.call('cleanUp');
 
 });

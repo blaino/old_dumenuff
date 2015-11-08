@@ -104,10 +104,12 @@ Meteor.methods({
 
     startGame: function () {
         Game.update({}, {$set: {state: "Started"}});
-        var percentBot = Game.findOne({}).percentBot;
+        var game = Game.findOne({});
+        var percentBot = game.percentBot;
         var timerId;
 
-        Meteor.call('matchPlayers', percentBot);
+        Meteor.call('matchPlayers', percentBot, 1, 6000);
+        //Meteor.call('matchPlayers', percentBot);
 
         function decGameTime () {
             Game.update({}, {$inc: {gameTime: -1}});

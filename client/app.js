@@ -59,6 +59,15 @@ Template.header.helpers({
             if (state == "Readying") {
                 return "Game starts in " + game.readyTime + " seconds";
             } else if (state == "Started") {
+                if (Meteor.userId()) {
+                    Meteor.call('findRoom', Meteor.userId(), function (error, room) {
+                        if (error) {
+                            console.log('In gameState(), got: ', error);
+                        } else {
+                            Session.set('channel', room._id);
+                        };
+                    });
+                };
                 return "Game ends in " + game.gameTime + " seconds";
             } else if (state == "Ended") {
                 return "Game over";

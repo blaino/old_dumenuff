@@ -93,7 +93,11 @@ Meteor.methods({
 
         // add channel
         Rooms.insert(room, function (error, roomId) {
-            Channels.insert({name: roomId});
+            if (error) {
+                console.log('In match() trying to insert channel: ', error);
+            } else {
+                Channels.insert({name: roomId});
+            }
         });
     },
 
@@ -158,12 +162,15 @@ Meteor.methods({
     rematch: function (playerId) {
         var room = Meteor.call('findRoom', playerId);
 
-        // Put both players (from room) in the Waiting queue
+        // Put both players (from room) in the Waiting queue (if not bot)
         Waiting.insert({player: room.player1, timeEntered: Date.now()});
-        Waiting.insert({player: room.player2, timeEntered: Date.now()});
+        if (room.player2 != 'bot') {
+            Waiting.insert({player: room.player2, timeEntered: Date.now()});
+        };
         // Delete room, channels
-        Rooms.remove({});
-        Channels.remove({});
+        Rooms.remove(room);
+        Channels.remove({name: room._id});
+
         // call matchPlayers()
         var percentBot = Game.findOne({}).percentBot;
         Meteor.call('matchPlayers', percentBot);
