@@ -80,10 +80,10 @@ Meteor.methods({
 
     // Called on startup
     newGame: function (readyTime, gameTime, numPlayers, percentBot) {
-        Game.remove({});
-        // setup config file? or config page?
+        var oldGame = Game.findOne({});
         Game.insert({state: "Waiting", readyTime: readyTime, gameTime: gameTime,
                      numPlayers: numPlayers, percentBot: percentBot, numReady: 0});
+        Game.remove(oldGame);
     },
 
     readyGame: function () {

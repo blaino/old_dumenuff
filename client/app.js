@@ -53,8 +53,8 @@ Template.footer.helpers({
 Template.header.helpers({
     gameState: function () {
         var game = Game.findOne({});
-        var waitingFor = game.numPlayers - game.numReady;
         if (game) {
+            var waitingFor = game.numPlayers - game.numReady;
             var state = game.state;
             if (state == "Readying") {
                 return "Game starts in " + game.readyTime + " seconds";
