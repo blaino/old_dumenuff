@@ -18,7 +18,15 @@ Meteor.startup(function() {
     //     });
     // }
 
-    Meteor.call('newGame', 5, 300, 2, 100);
+    var readyTime = 5,
+        gameTime = 300,
+        threshold = 2,
+        percentBot = 50;
+
+    Meteor.call('newGame', readyTime, gameTime, threshold, percentBot);
+    Channels.insert({name: "lobby"});
+
+    // Do you really need to go nuclear here:
     Meteor.call('cleanUp');
 
 });

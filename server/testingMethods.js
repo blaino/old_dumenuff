@@ -6,6 +6,8 @@ Meteor.methods({
         Channels.remove({});
         Scores.remove({});
         Waiting.remove({});
+
+        Channels.insert({name: "lobby"});
     },
 
     addStartingPlayers: function (numPlayers) {
@@ -85,7 +87,7 @@ Meteor.methods({
         var oldGame = Game.findOne({});
         Game.insert({state: "Waiting", readyTime: readyTime, gameTime: gameTime,
                      numPlayers: numPlayers, percentBot: percentBot, numReady: 0,
-                     threshold: 2, pauseTime: 6000});
+                     threshold: 2, pauseTime: 10000});
         Game.remove(oldGame);
     },
 

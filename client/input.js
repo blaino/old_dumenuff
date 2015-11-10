@@ -64,10 +64,16 @@ Template.channel.events({
 
 Template.listings.events({
     'click #bot-button': function () {
+        var lobby = Channels.findOne({name: 'lobby'});
+        Session.set('channel', lobby.name);
+
         Meteor.call('updateWinnerLoserScore', Meteor.userId(), "bot");
         Meteor.call('rematch', Meteor.userId());
     },
     'click #human-button': function () {
+        var lobby = Channels.findOne({name: 'lobby'});
+        Session.set('channel', lobby.name);
+
         Meteor.call('updateWinnerLoserScore', Meteor.userId(), "human");
         Meteor.call('rematch', Meteor.userId());
     }

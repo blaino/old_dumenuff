@@ -5,39 +5,41 @@ describe('Getting started with Jasmine and Meteor', function () {
         var score = Number($('.user-menu_score').text());
         expect(score).toEqual(jasmine.any(Number));
     });
+});
 
-    xit("clicking bot when playing a bot is a win", function () {
-    });
 
-    xit("clicking bot when playing a human is a loss", function () {
-    });
 
-    xit("clicking human when playing a human is a win", function () {
-    });
+// These tests put game into end state skirting seeder's newGame()
+// Once the stuff in seeder is user-controled input, these tests could
+// be turned back on.
 
-    xit("clicking human when playing a bot is a loss", function () {
-    });
+// describe('listings.events', function () {
 
-    xit("winning a round should increase user's score by 1 point", function () {
-    });
+//     describe('click #bot-button', function () {
 
-    xit("losing a round should increase opponent's score by 1 point", function () {
-    });
+//         it("should change channel to lobby", function () {
+//             Meteor.call('startGame');
 
-    xit("both buttons should be inactive before the game has started", function () {
-    });
+//             $('#bot-button').click();
+//             expect(Session.get('channel')).toEqual('lobby');
 
-    describe('game', function () {
-        xit("should end when time limit is reached", function () {
-        });
-        xit("should display winner when time limit is reached", function () {
-        });
-        xit("should start when start timer expires", function () {
-        });
-        describe('start timer', function () {
-            xit("should start when all x players have joined", function () {
-            });
-        });
-    });
+//             Meteor.call('endGame');
+//         });
+
+//     });
+
+//     describe('click #human-button', function () {
+
+//         it("should change channel to lobby", function () {
+//             Meteor.call('startGame');
+
+//             $('#human-button').click();
+//             expect(Session.get('channel')).toEqual('lobby');
+
+//             Meteor.call('endGame');
+//         });
+
+//     });
+
 
 });

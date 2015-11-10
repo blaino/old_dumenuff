@@ -1,4 +1,4 @@
-describe('Integration test', function () {
+xdescribe('Integration test', function () {
     console.log('=== Start: Integration Test ===');
 
     var percentBot = 100,

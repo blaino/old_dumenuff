@@ -92,3 +92,15 @@ Tracker.autorun(function(){
         });
     };
 });
+
+
+Tracker.autorun(function(){
+    Meteor.call('findRoom', Meteor.userId(), function (error, room) {
+        if (error) {
+            var lobby = Channels.findOne({name: 'lobby'});
+            Session.set('channel', lobby.name);
+        } else {
+            Session.set('channel', room._id);
+        };
+    });
+});
