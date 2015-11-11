@@ -66,39 +66,42 @@ Meteor.methods({
         // get Waiting sorted
         var waiting = Waiting.find({}, {sort: {timeEntered: 1}}).fetch();
 
-        // get the oldest, remove from Waiting
-        var oldest = waiting[0];
-        Waiting.remove({player: oldest.player});
+        if (waiting.length > 0) {
 
-        var matchWithBot = Math.random() < (percentBot / 100);
+            // get the oldest, remove from Waiting
+            var oldest = waiting[0];
+            Waiting.remove({player: oldest.player});
 
-        if (!matchWithBot) {
-            // pick random from rest, remove
-            var remaining = Waiting.find({}).fetch();
-            if (remaining.length > 0) {
-                var count = remaining.length;
-                var index = Math.floor(Math.random() * count);
-                var randomSelection = remaining[index];
-                Waiting.remove({player: randomSelection.player});
+            var matchWithBot = Math.random() < (percentBot / 100);
 
-                // create a room with oldest and the random selection
-                room = {player1: oldest.player, player2: randomSelection.player};
+            if (!matchWithBot) {
+                // pick random from rest, remove
+                var remaining = Waiting.find({}).fetch();
+                if (remaining.length > 0) {
+                    var count = remaining.length;
+                    var index = Math.floor(Math.random() * count);
+                    var randomSelection = remaining[index];
+                    Waiting.remove({player: randomSelection.player});
+
+                    // create a room with oldest and the random selection
+                    room = {player1: oldest.player, player2: randomSelection.player};
+                } else {
+                    // but if there isn't anyone available, assign to bot
+                    room = {player1: oldest.player, player2: "bot"};
+                }
             } else {
-                // but if there isn't anyone available, assign to bot
                 room = {player1: oldest.player, player2: "bot"};
-            }
-        } else {
-            room = {player1: oldest.player, player2: "bot"};
-        };
+            };
 
-        // add channel
-        Rooms.insert(room, function (error, roomId) {
-            if (error) {
-                console.log('In match() trying to insert channel: ', error);
-            } else {
-                Channels.insert({name: roomId});
-            }
-        });
+            // add channel
+            Rooms.insert(room, function (error, roomId) {
+                if (error) {
+                    console.log('In match() trying to insert channel: ', error);
+                } else {
+                    Channels.insert({name: roomId});
+                }
+            });
+        }
     },
 
     findRoom: function (userId) {
