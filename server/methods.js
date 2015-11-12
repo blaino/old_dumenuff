@@ -146,8 +146,7 @@ Meteor.methods({
         };
     },
 
-    getOtherPlayer: function(playerId) {
-        var room = Meteor.call('findRoom', playerId);
+    getOtherPlayer: function(playerId, room) {
         if (room.player1 != playerId) {
             return room.player1;
         } else {
@@ -157,7 +156,8 @@ Meteor.methods({
 
     updateWinnerLoserScore: function(playerId, selection) {
         var room = Meteor.call('findRoom', playerId);
-        var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
+
+        var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
         var winnerPair = Meteor.call('getWinner', room, otherPlayerId, selection);
         Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
     },
@@ -170,6 +170,7 @@ Meteor.methods({
         if (room.player2 != 'bot') {
             Waiting.insert({player: room.player2, timeEntered: Date.now()});
         };
+
         // Delete room, channels
         Rooms.remove(room);
         Channels.remove({name: room._id});

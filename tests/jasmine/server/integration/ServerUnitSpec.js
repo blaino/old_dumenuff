@@ -316,7 +316,7 @@ describe('methods', function () {
             var userid = user._id;
             var room = Meteor.call('findRoom', userid);
 
-            var otherPlayerId = Meteor.call('getOtherPlayer', userid);
+            var otherPlayerId = Meteor.call('getOtherPlayer', userid, room);
             var otherPlayerRoom = Meteor.call('findRoom', otherPlayerId);
 
             expect(otherPlayerId).not.toEqual(userid);
@@ -339,7 +339,8 @@ describe('methods', function () {
 
             it("fooled should lose a point, fooler should gain a point", function () {
                 var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
-                var otherPlayerId = Meteor.call('getOtherPlayer', playerId);
+                var room = Meteor.call('findRoom', playerId);
+                var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
 
                 // Initialize score (still sucks)
                 Meteor.call('updateWinnerLoserScore', playerId, "bot");
