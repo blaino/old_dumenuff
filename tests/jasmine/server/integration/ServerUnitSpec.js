@@ -339,7 +339,7 @@ describe('methods', function () {
 
                 spyOn(Rooms, 'remove');
                 spyOn(Channels, 'remove');
-                Meteor.call('scoreAndRematch', player, "bot");
+                Meteor.call('scoreAndRematch', player, "bot", aRoom);
                 expect(Rooms.remove.calls.count()).toEqual(1);
                 expect(Channels.remove.calls.count()).toEqual(1);
 
@@ -364,7 +364,7 @@ describe('methods', function () {
                 var room = Meteor.call('findRoom', playerId);
                 var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
 
-                Meteor.call('scoreAndRematch', playerId, "bot");
+                Meteor.call('scoreAndRematch', playerId, "bot", room);
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
                 var afterScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
@@ -372,23 +372,6 @@ describe('methods', function () {
                 expect(afterScorePlayer1).toEqual(-1);
                 expect(afterScorePlayer2).toEqual(1);
             });
-
-            xit("should get same even if second player 'clicks' right after first", function () {
-                var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
-                var room = Meteor.call('findRoom', playerId);
-                var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
-
-                // Two calls in close succession:
-                Meteor.call('scoreAndRematch', playerId, "bot");
-                Meteor.call('scoreAndRematch', otherPlayerId, "bot");
-
-                var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
-                var afterScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
-
-                expect(afterScorePlayer1).toEqual(-1);
-                expect(afterScorePlayer2).toEqual(1);
-            });
-
         });
 
         describe("with a bot", function () {
@@ -404,8 +387,9 @@ describe('methods', function () {
 
             it("player's score should go up by one after selecting bot", function () {
                 var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
+                var room = Meteor.call('findRoom', playerId);
 
-                Meteor.call('scoreAndRematch', playerId, "bot");
+                Meteor.call('scoreAndRematch', playerId, "bot", room);
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
 
@@ -414,8 +398,9 @@ describe('methods', function () {
 
             it("player's score should go down by one after selecting human", function () {
                 var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
+                var room = Meteor.call('findRoom', playerId);
 
-                Meteor.call('scoreAndRematch', playerId, "human");
+                Meteor.call('scoreAndRematch', playerId, "human", room);
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
 

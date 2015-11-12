@@ -154,8 +154,8 @@ Meteor.methods({
         }
     },
 
-    scoreAndRematch: function(playerId, selection) {
-        var room = Meteor.call('findRoom', playerId);
+    scoreAndRematch: function(playerId, selection, room) {
+        console.log('scoreAndRematch room passed in', room);
 
         // Delete room, channels
         Rooms.remove(room);

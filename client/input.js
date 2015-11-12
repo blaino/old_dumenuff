@@ -9,7 +9,9 @@ Template.footer.events({
                 var userId = Meteor.userId();
 
                 Meteor.call('findRoom', userId, function (error, room) {
-                    if (!error) {
+                    if (error) {
+                        console.log('keypress input, findRoom(): ', error);
+                    } else {
                         console.log('room', room);
                         Meteor.call(
                             'newMessage',
@@ -27,7 +29,7 @@ Template.footer.events({
                             // TODO: pull out into a function???
                             Meteor.call('reply', messageText, function (error, result) {
                                 if (error) {
-                                    console.log('error');
+                                    console.log('keypress input, reply(): ', error);
                                 } else {
                                     Meteor.call(
                                         'newMessage',
@@ -67,12 +69,28 @@ Template.listings.events({
         var lobby = Channels.findOne({name: 'lobby'});
         Session.set('channel', lobby.name);
 
-        Meteor.call('scoreAndRematch', Meteor.userId(), "bot");
+        var playerId = Meteor.userId();
+        var room = Meteor.call('findRoom', playerId, function (error, room) {
+            if (error) {
+                console.log('click bot: ', error);
+            }
+            else {
+                Meteor.call('scoreAndRematch', playerId, "bot", room);
+            }
+        });
     },
     'click #human-button': function () {
         var lobby = Channels.findOne({name: 'lobby'});
         Session.set('channel', lobby.name);
 
-        Meteor.call('scoreAndRematch', Meteor.userId(), "human");
+        var playerId = Meteor.userId();
+        var room = Meteor.call('findRoom', playerId, function (error, room) {
+            if (error) {
+                console.log('click human: ', error);
+            }
+            else {
+                Meteor.call('scoreAndRematch', playerId, "human", room);
+            }
+        });
     }
 });
