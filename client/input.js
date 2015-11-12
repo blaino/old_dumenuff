@@ -67,14 +67,12 @@ Template.listings.events({
         var lobby = Channels.findOne({name: 'lobby'});
         Session.set('channel', lobby.name);
 
-        Meteor.call('updateWinnerLoserScore', Meteor.userId(), "bot");
-        Meteor.call('rematch', Meteor.userId());
+        Meteor.call('scoreAndRematch', Meteor.userId(), "bot");
     },
     'click #human-button': function () {
         var lobby = Channels.findOne({name: 'lobby'});
         Session.set('channel', lobby.name);
 
-        Meteor.call('updateWinnerLoserScore', Meteor.userId(), "human");
-        Meteor.call('rematch', Meteor.userId());
+        Meteor.call('scoreAndRematch', Meteor.userId(), "human");
     }
 });

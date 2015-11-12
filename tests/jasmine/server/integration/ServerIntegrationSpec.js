@@ -35,7 +35,7 @@ xdescribe('Integration test', function () {
     });
 
     it("should have the right score after 'a round'", function () {
-        Meteor.call('updateWinnerLoserScore', player0._id, "bot");
+        Meteor.call('scoreAndRematch', player0._id, "bot");
         var p0score = Scores.find({player: player0._id}).fetch()[0];
         expect(p0score.score).toEqual(1);
     });

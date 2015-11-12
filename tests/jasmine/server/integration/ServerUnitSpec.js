@@ -324,7 +324,29 @@ describe('methods', function () {
         });
     });
 
-    describe("updateWinnerLoserScore", function () {
+    describe("scoreAndRematch", function () {
+
+        describe("should always", function () {
+
+            it("remove 1 room, 1 channel", function () {
+                setupPlayersInWaiting(4);
+                Meteor.call('matchPlayers', 0, 1, 3000);
+                var waiting = Waiting.find({}).fetch().length;
+                expect(waiting).toEqual(0);
+
+                var aRoom = Rooms.findOne({});
+                var player = aRoom.player1;
+
+                spyOn(Rooms, 'remove');
+                spyOn(Channels, 'remove');
+                Meteor.call('scoreAndRematch', player, "bot");
+                expect(Rooms.remove.calls.count()).toEqual(1);
+                expect(Channels.remove.calls.count()).toEqual(1);
+
+                tearDownPlayersAndRooms(4);
+            });
+
+        });
 
         describe("with two humans", function () {
 
@@ -342,22 +364,31 @@ describe('methods', function () {
                 var room = Meteor.call('findRoom', playerId);
                 var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
 
-                // Initialize score (still sucks)
-                Meteor.call('updateWinnerLoserScore', playerId, "bot");
-
-                var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
-
-                var beforeScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
-
-
-                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+                Meteor.call('scoreAndRematch', playerId, "bot");
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
                 var afterScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
 
-                expect(afterScorePlayer1).toEqual(beforeScorePlayer1 - 1);
-                expect(afterScorePlayer2).toEqual(beforeScorePlayer2 + 1);
+                expect(afterScorePlayer1).toEqual(-1);
+                expect(afterScorePlayer2).toEqual(1);
             });
+
+            xit("should get same even if second player 'clicks' right after first", function () {
+                var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
+                var room = Meteor.call('findRoom', playerId);
+                var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
+
+                // Two calls in close succession:
+                Meteor.call('scoreAndRematch', playerId, "bot");
+                Meteor.call('scoreAndRematch', otherPlayerId, "bot");
+
+                var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
+                var afterScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
+
+                expect(afterScorePlayer1).toEqual(-1);
+                expect(afterScorePlayer2).toEqual(1);
+            });
+
         });
 
         describe("with a bot", function () {
@@ -374,31 +405,21 @@ describe('methods', function () {
             it("player's score should go up by one after selecting bot", function () {
                 var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
 
-                // Initialize score (still sucks)
-                Meteor.call('updateWinnerLoserScore', playerId, "bot");
-
-                var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
-
-                Meteor.call('updateWinnerLoserScore', playerId, "bot");
+                Meteor.call('scoreAndRematch', playerId, "bot");
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
 
-                expect(afterScorePlayer1).toEqual(beforeScorePlayer1 + 1);
+                expect(afterScorePlayer1).toEqual(1);
             });
 
             it("player's score should go down by one after selecting human", function () {
                 var playerId = Meteor.users.findOne({username: "unitUser1"})._id;
 
-                // Initialize score (still sucks)
-                Meteor.call('updateWinnerLoserScore', playerId, "bot");
-
-                var beforeScorePlayer1 = Scores.findOne({player: playerId}).score;
-
-                Meteor.call('updateWinnerLoserScore', playerId, "human");
+                Meteor.call('scoreAndRematch', playerId, "human");
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
 
-                expect(afterScorePlayer1).toEqual(beforeScorePlayer1 - 1);
+                expect(afterScorePlayer1).toEqual(-1);
             });
 
         });
@@ -500,7 +521,7 @@ describe('methods', function () {
             var player = aRoom.player1;
 
             spyOn(Waiting, 'insert');
-            Meteor.call('rematch', player);
+            Meteor.call('rematch', player, aRoom);
             expect(Waiting.insert.calls.count()).toEqual(2);
 
             tearDownPlayersAndRooms(4);
@@ -516,26 +537,8 @@ describe('methods', function () {
             var player = aRoom.player1;
 
             spyOn(Waiting, 'insert');
-            Meteor.call('rematch', player);
+            Meteor.call('rematch', player, aRoom);
             expect(Waiting.insert.calls.count()).toEqual(1);
-
-            tearDownPlayersAndRooms(4);
-        });
-
-        it("should remove 1 room, 1 channel", function () {
-            setupPlayersInWaiting(4);
-            Meteor.call('matchPlayers', 0, 1, 3000);
-            var waiting = Waiting.find({}).fetch().length;
-            expect(waiting).toEqual(0);
-
-            var aRoom = Rooms.findOne({});
-            var player = aRoom.player1;
-
-            spyOn(Rooms, 'remove');
-            spyOn(Channels, 'remove');
-            Meteor.call('rematch', player);
-            expect(Rooms.remove.calls.count()).toEqual(1);
-            expect(Channels.remove.calls.count()).toEqual(1);
 
             tearDownPlayersAndRooms(4);
         });
@@ -551,7 +554,7 @@ describe('methods', function () {
 
             spyOn(Meteor, 'call').and.callThrough();
 
-            Meteor.call('rematch', player);
+            Meteor.call('rematch', player, aRoom);
 
             var game = Game.findOne({});
             var percentBot = game.percentBot;

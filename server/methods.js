@@ -154,26 +154,27 @@ Meteor.methods({
         }
     },
 
-    updateWinnerLoserScore: function(playerId, selection) {
+    scoreAndRematch: function(playerId, selection) {
         var room = Meteor.call('findRoom', playerId);
+
+        // Delete room, channels
+        Rooms.remove(room);
+        Channels.remove({name: room._id});
 
         var otherPlayerId = Meteor.call('getOtherPlayer', playerId, room);
         var winnerPair = Meteor.call('getWinner', room, otherPlayerId, selection);
+
         Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
+        Meteor.call('rematch', playerId, room);
     },
 
-    rematch: function (playerId) {
-        var room = Meteor.call('findRoom', playerId);
+    rematch: function (playerId, room) {
 
         // Put both players (from room) in the Waiting queue (if not bot)
         Waiting.insert({player: room.player1, timeEntered: Date.now()});
         if (room.player2 != 'bot') {
             Waiting.insert({player: room.player2, timeEntered: Date.now()});
         };
-
-        // Delete room, channels
-        Rooms.remove(room);
-        Channels.remove({name: room._id});
 
         // call matchPlayers()
         var game = Game.findOne({});
