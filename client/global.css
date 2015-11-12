@@ -129,12 +129,12 @@ body {
   display: inline-block;
   padding: 0 .5rem 0 1.5rem;
   color: #555459;
-  font-size: 2.4rem;
-  font-weight: 900;
+  font-size: 1.8rem;
+  font-weight: 700;
   line-height: 100px;
   cursor: pointer;
   float: right;
-  padding-right: 100px;
+  padding-right: 70px;
 }
 
 /* line 29, ../tests/sass/components/_header.scss */
