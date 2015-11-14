@@ -26,6 +26,15 @@ Template.listings.helpers({
                 return true;
             };
         };
+    },
+    joinButtonDisabled: function () {
+        var game = Game.findOne({});
+        if (game) {
+            var state = game.state;
+            if (state != "Waiting") {
+                return true;
+            };
+        };
     }
 });
 
@@ -79,18 +88,6 @@ Template.header.helpers({
         }
     }
 });
-
-Tracker.autorun(function(){
-    if (Meteor.userId()) {
-        Meteor.call('addPlayer', Meteor.userId());
-        Meteor.call('checkReady', function (error, isReady) {
-            if (isReady) {
-                Meteor.call('readyGame');
-            };
-        });
-    };
-});
-
 
 Tracker.autorun(function(){
     Meteor.call('findRoom', Meteor.userId(), function (error, room) {

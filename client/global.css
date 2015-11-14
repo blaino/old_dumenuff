@@ -41,6 +41,7 @@ caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
+
 }
 
 /* line 30, ../../../../../../var/lib/gems/1.9.1/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
@@ -203,6 +204,12 @@ body {
   font-weight: 700;
   color: #ab9ba9;
   position: relative;
+}
+
+.join-button {
+  position: absolute;
+  bottom: 200px;
+  left: 100px;
 }
 
 /* line 26, ../tests/sass/components/_listings.scss */

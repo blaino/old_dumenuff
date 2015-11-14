@@ -92,5 +92,15 @@ Template.listings.events({
                 Meteor.call('scoreAndRematch', playerId, "human", room);
             }
         });
+    },
+    'click #join-button': function () {
+        if (Meteor.userId()) {
+            Meteor.call('addPlayer', Meteor.userId());
+            Meteor.call('checkReady', function (error, isReady) {
+                if (isReady) {
+                    Meteor.call('readyGame');
+                };
+            });
+        };
     }
 });

@@ -75,11 +75,11 @@ Meteor.methods({
 
     checkReady: function () {
         var numPlayers = Game.findOne({}).numPlayers;
-        var loginCount = Meteor.call('countLogins');
+        var count = Waiting.find({}).fetch().length;
         var game = Game.findOne({});
 
         // Ready when in Waiting and have right number of players
-        return (loginCount == numPlayers && game.state == 'Waiting');
+        return (count == numPlayers && game.state == 'Waiting');
     },
 
     // Called on startup
