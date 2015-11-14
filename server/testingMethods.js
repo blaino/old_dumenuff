@@ -25,15 +25,15 @@ Meteor.methods({
         };
     },
 
-    matchPlayersOld: function (percentBot) {
+    matchPlayers: function (percentBot, threshold, pauseTime) {
         var waiting = Waiting.find({}).fetch().length;
-        while (waiting > 0) {
+        while (waiting >= threshold) {
             Meteor.call('match', percentBot);
             waiting = Waiting.find({}).fetch().length;
         };
     },
 
-    matchPlayers: function (percentBot, threshold, pauseTime) {
+    matchPlayersComplex: function (percentBot, threshold, pauseTime) {
         var waiting = Waiting.find({}).fetch().length;
         while (waiting >= threshold) {
             Meteor.call('match', percentBot);

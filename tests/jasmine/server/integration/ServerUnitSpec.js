@@ -473,22 +473,24 @@ describe('methods', function () {
             tearDownPlayersAndRooms(5);
         });
 
-        it("should call match 3x when threshold is 3 and 5 players", function () {
-            setupPlayersInWaiting(5);
-            spyOn(Meteor, 'call').and.callThrough();
-            Meteor.call('matchPlayers', 0, 3, 10);
-            expect(Meteor.call).toHaveBeenCalledWith('match', 0);
-            // One for the original call to matchPlayers, 3 calls to match
-            expect(Meteor.call.calls.count()).toEqual(4);
-            tearDownPlayersAndRooms(5);
-        });
+        // For complex version of matchPlayers() - maybe a bs test
+        // it("should call match 3x when threshold is 3 and 5 players", function () {
+        //     setupPlayersInWaiting(5);
+        //     spyOn(Meteor, 'call').and.callThrough();
+        //     Meteor.call('matchPlayers', 0, 3, 10);
+        //     expect(Meteor.call).toHaveBeenCalledWith('match', 0);
+        //     // One for the original call to matchPlayers, 3 calls to match
+        //     expect(Meteor.call.calls.count()).toEqual(4);
+        //     tearDownPlayersAndRooms(5);
+        // });
 
-        it("should call match 1x when threshold is 1 and 2 players", function () {
+        it("should call match 2x when threshold is 1 and 2 players", function () {
             setupPlayersInWaiting(2);
             spyOn(Meteor, 'call').and.callThrough();
             Meteor.call('matchPlayers', 0, 1, 10);
             expect(Meteor.call).toHaveBeenCalledWith('match', 0);
-            // One for the original call to matchPlayers, 2 calls to match
+
+            // This expectation sucks - gotta be a better way
             expect(Meteor.call.calls.count()).toEqual(2);
             tearDownPlayersAndRooms(2);
         });
