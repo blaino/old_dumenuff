@@ -1,5 +1,15 @@
 Template.messages.helpers({
-    messages: Messages.find({})
+    messages: Messages.find({}),
+});
+
+Template.message.helpers({
+    playerName: function (user) {
+        if (user && user._id == Meteor.userId()) {
+            return user.username;
+        } else {
+            return "player";
+        }
+    }
 });
 
 Accounts.ui.config({
