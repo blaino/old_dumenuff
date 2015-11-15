@@ -6,6 +6,8 @@ Meteor.subscribe('scores');
 
 Meteor.subscribe('game');
 
+Meteor.subscribe('waiting');
+
 Template.messages.onCreated(function() {
   var self = this;
   self.autorun(function() {

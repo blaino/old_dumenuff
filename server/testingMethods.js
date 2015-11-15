@@ -1,7 +1,7 @@
 Meteor.methods({
     cleanUp: function () {
         Messages.remove({});
-        Meteor.users.remove({});
+        // Meteor.users.remove({});
         Rooms.remove({});
         Channels.remove({});
         Scores.remove({});

@@ -23,3 +23,7 @@ Meteor.publish('rooms', function () {
 Meteor.publish('game', function () {
     return Game.find();
 });
+
+Meteor.publish('waiting', function () {
+    return Waiting.find();
+});

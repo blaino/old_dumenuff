@@ -29,12 +29,18 @@ Template.listings.helpers({
     },
     joinButtonDisabled: function () {
         var game = Game.findOne({});
+        var playerInWaiting = Waiting.findOne({player: Meteor.userId()});
+
         if (game) {
             var state = game.state;
             if (state != "Waiting") {
                 return true;
             };
         };
+
+        if (playerInWaiting) {
+            return true;
+        }
     }
 });
 
