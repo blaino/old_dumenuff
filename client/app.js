@@ -39,8 +39,6 @@ Template.listings.helpers({
     },
     joinButtonDisabled: function () {
         var game = Game.findOne({});
-        var playerInWaiting = Waiting.findOne({player: Meteor.userId()});
-
         if (game) {
             var state = game.state;
             if (state != "Waiting") {
@@ -48,9 +46,20 @@ Template.listings.helpers({
             };
         };
 
+        var playerInWaiting = Waiting.findOne({player: Meteor.userId()});
         if (playerInWaiting) {
             return true;
         }
+    },
+    startButtonDisabled: function () {
+        var game = Game.findOne({});
+
+        if (game) {
+            var state = game.state;
+            if (state != "Ended") {
+                return true;
+            };
+        };
     }
 });
 
