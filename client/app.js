@@ -95,9 +95,7 @@ Template.header.helpers({
             } else if (state == "Started") {
                 if (Meteor.userId()) {
                     Meteor.call('findRoom', Meteor.userId(), function (error, room) {
-                        if (error) {
-                            console.log('In gameState(), got: ', error);
-                        } else {
+                        if (!error) {
                             Session.set('channel', room._id);
                         };
                     });
