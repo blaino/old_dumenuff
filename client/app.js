@@ -36,6 +36,10 @@ Template.listings.helpers({
                 return true;
             };
         };
+
+        if (Session.get('channel') == 'lobby') {
+            return true;
+        }
     },
     joinButtonDisabled: function () {
         var game = Game.findOne({});
