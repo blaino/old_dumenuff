@@ -99,7 +99,9 @@ Template.header.helpers({
             } else if (state == "Started") {
                 if (Meteor.userId()) {
                     Meteor.call('findRoom', Meteor.userId(), function (error, room) {
-                        if (!error) {
+                        if (error) {
+                            Session.set('channel', 'lobby');
+                        } else {
                             Session.set('channel', room._id);
                         };
                     });
@@ -116,13 +118,15 @@ Template.header.helpers({
     }
 });
 
-Tracker.autorun(function(){
-    Meteor.call('findRoom', Meteor.userId(), function (error, room) {
-        if (error) {
-            var lobby = Channels.findOne({name: 'lobby'});
-            Session.set('channel', lobby.name);
-        } else {
-            Session.set('channel', room._id);
-        };
-    });
-});
+// Tracker.autorun(function(){
+//     Meteor.call('findRoom', Meteor.userId(), function (error, room) {
+//         if (error) {
+//             console.log('Error in autorun: ', error);
+//             var lobby = Channels.findOne({name: 'lobby'});
+//             console.log('lobby', lobby);
+//             Session.set('channel', lobby.name);
+//         } else {
+//             Session.set('channel', room._id);
+//         };
+//     });
+// });

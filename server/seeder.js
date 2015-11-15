@@ -20,10 +20,10 @@ Meteor.startup(function() {
 
     var readyTime = 5,
         gameTime = 300,
-        threshold = 2,
+        numPlayers = 4,
         percentBot = 50;
 
-    Meteor.call('newGame', readyTime, gameTime, threshold, percentBot);
+    Meteor.call('newGame', readyTime, gameTime, numPlayers, percentBot);
     Channels.insert({name: "lobby"});
 
     // Do you really need to go nuclear here:

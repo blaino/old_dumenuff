@@ -12,7 +12,6 @@ Template.footer.events({
                     if (error) {
                         console.log('keypress input, findRoom(): ', error);
                     } else {
-                        console.log('room', room);
                         Meteor.call(
                             'newMessage',
                             // Human
@@ -53,14 +52,6 @@ Template.footer.events({
     'keyup input': function(event) {
         var objDiv = $('.message-history')[0];
         objDiv.scrollTop = objDiv.scrollHeight;
-    }
-});
-
-// TODO: get rid of this
-Template.channel.events({
-    'click .channel': function (e) {
-        console.log('got channel click');
-        Session.set('channel', this.name);
     }
 });
 
@@ -106,10 +97,10 @@ Template.listings.events({
     'click #start-button': function () {
         var readyTime = 5,
             gameTime = 300,
-            threshold = 2,
+            numPlayers = 4,
             percentBot = 50;
 
         Meteor.call('cleanUp');
-        Meteor.call('newGame', readyTime, gameTime, threshold, percentBot);
+        Meteor.call('newGame', readyTime, gameTime, numPlayers, percentBot);
     }
 });
