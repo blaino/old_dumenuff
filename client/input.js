@@ -98,7 +98,7 @@ Template.listings.events({
     'click #start-button': function () {
         var readyTime = 5,
             gameTime = 300,
-            numPlayers = 4,
+            numPlayers = 3,
             percentBot = 50;
 
         Meteor.call('cleanUp');

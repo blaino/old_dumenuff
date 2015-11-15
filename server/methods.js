@@ -9,9 +9,13 @@ Meteor.methods({
         var RiveScript = Meteor.npmRequire('rivescript');
         var rs = new RiveScript();
 
+        var path = Npm.require('path');
+        var basepath = path.resolve();
+        path = basepath + "/assets/app/brain";
+
         var reply = Async.runSync(function (done) {
             rs.loadDirectory(
-                "/Users/blainenelson/projects/vk/lib/brain",
+                path,
                 function(batch_num) {
                     rs.sortReplies();
                     var reply = rs.reply("local-user", message);
