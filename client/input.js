@@ -85,14 +85,15 @@ Template.listings.events({
         });
     },
     'click #join-button': function () {
-        if (Meteor.userId()) {
-            Meteor.call('addPlayer', Meteor.userId());
+        var user = Meteor.userId();
+        if (user) {
+            Meteor.call('addPlayer', user);
             Meteor.call('checkReady', function (error, isReady) {
                 if (isReady) {
                     Meteor.call('readyGame');
                 };
             });
-        };
+        }
     },
     'click #start-button': function () {
         var readyTime = 5,

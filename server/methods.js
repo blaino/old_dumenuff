@@ -51,8 +51,11 @@ Meteor.methods({
     },
 
     addPlayer: function (playerId) {
-        Waiting.insert({player: playerId, timeEntered: Date.now()});
-        Game.update({}, {$inc: {numReady: 1}});
+        var alreadyWaiting = Waiting.findOne({player: playerId});
+        if (typeof alreadyWaiting == 'undefined') {
+            Waiting.insert({player: playerId, timeEntered: Date.now()});
+            Game.update({}, {$inc: {numReady: 1}});
+        }
     },
 
     match: function (percentBot) {
