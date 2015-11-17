@@ -1,5 +1,26 @@
 // A generic set of chatting responses. This set mimicks the classic Eliza bot.
 
++ xxxgreetingxxx
+- Hey
+- hey
+- Hi
+- HI
+- hllo
+- hello
+- Hello
+- bro
+- Matt sucks
+- alan is a foo
+- what up
+- hows it going
+- how's it goin
+- do you really want to play this game?
+- what is your name?
+- what should I call you?
+- whats yer name
+- i hate this
+- look behind you
+
 + *
 - I'm not sure I understand you fully.
 - Please go on.

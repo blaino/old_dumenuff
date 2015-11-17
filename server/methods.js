@@ -23,7 +23,7 @@ Meteor.methods({
                 });
         });
         var charCount = reply.result.length;
-        var delay = 100 * charCount + 2000 * Math.random();
+        var delay = 120 * charCount + 3000 * Math.random();
         Meteor._sleepForMs(delay);
         return reply.result;
     },

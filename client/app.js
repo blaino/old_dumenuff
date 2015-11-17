@@ -130,3 +130,40 @@ Template.header.helpers({
 //         };
 //     });
 // });
+
+// This is insane, how to simplify or clean?
+Tracker.autorun(function() {
+    if (Session.get('channel') != 'lobby') {
+        if (Math.random() < 0.50) {
+            var user = Meteor.userId();
+            if (user) {
+                Meteor.call('findRoom', user, function (error, room) {
+                    if (error) {
+                        console.log('autorun, findRoom(): ', error);
+                    } else {
+                        Meteor.call('getOtherPlayer', user, room, function (error, otherPlayer) {
+                            if (error) {
+                                console.log('autorun, getOtherPlayer(): ', error);
+                            } else {
+                                if (otherPlayer == 'bot') {
+                                    Meteor.call('reply', 'xxxgreetingxxx', function (error, result) {
+                                        if (error) {
+                                            console.log('autorun, reply(): ', error);
+                                        } else {
+                                            Meteor.call('newMessage',
+                                                        Meteor.users.findOne({username: "player"}),
+                                                        {
+                                                            text: result,
+                                                            channel: room._id
+                                                        });
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+});
