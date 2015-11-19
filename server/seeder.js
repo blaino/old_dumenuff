@@ -20,7 +20,7 @@ Meteor.startup(function() {
 
     var readyTime = 5,
         gameTime = 300,
-        numPlayers = 3,
+        numPlayers = 5,
         percentBot = 50;
 
     Meteor.call('newGame', readyTime, gameTime, numPlayers, percentBot);
