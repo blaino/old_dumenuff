@@ -6,6 +6,8 @@ var casper = require('casper').create({
 
 casper.options.viewportSize = {width: 700, height: 600};
 
+var username = casper.cli.get("username");
+
 casper.start('http://localhost:3000');
 
 casper.wait(1000);
@@ -42,14 +44,14 @@ casper.thenEvaluate(function(username, password) {
     document.querySelector('#login-password').value = password;
     // This not working:
     //document.querySelector('#login-buttons-password').click();
-}, 'blaine', 'password');
+}, username, 'password');
 
 casper.thenClick('#login-buttons-password');
 
 casper.then(function () {
-    this.waitForText("blaine", function () {
-        this.echo('==== Found blaine');
-        this.capture('withBlaine.png');
+    this.waitForText(username, function () {
+        this.echo('==== Found ' + username);
+        this.capture('with' + username + '.png');
     });
 });
 
