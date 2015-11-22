@@ -42,14 +42,14 @@ casper.thenEvaluate(function(username, password) {
     document.querySelector('#login-password').value = password;
     // This not working:
     //document.querySelector('#login-buttons-password').click();
-}, 'gunnar', 'password');
+}, 'blaine', 'password');
 
 casper.thenClick('#login-buttons-password');
 
 casper.then(function () {
-    this.waitForText("gunnar", function () {
-        this.echo('==== Found gunnar');
-        this.capture('withGunnar.png');
+    this.waitForText("blaine", function () {
+        this.echo('==== Found blaine');
+        this.capture('withBlaine.png');
     });
 });
 
@@ -74,7 +74,7 @@ casper.then(function () {
     this.waitForSelector("#join-button", function () {
         this.echo('==== found join button');
         this.click('#join-button');
-        this.capture('join2.png');
+        this.capture('join1.png');
     });
 });
 
@@ -83,11 +83,11 @@ casper.then(function () {
                      function () {
                          this.echo('==== Found Game ends in');
                          this.click('#bot-button');
-                         this.capture('score2.png');
+                         this.capture('score1.png');
                      },
                      function () {
                          this.echo('==== Cannot find Game ends in');
-                         this.capture('errorScore2.png');
+                         this.capture('errorScore1.png');
                      },
                      6000);
 });
