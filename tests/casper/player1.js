@@ -14,12 +14,12 @@ function waitAndClick(selector, that) {
     that.waitForSelector(
         selector,
         function () {
-            that.echo('++++ Found ' + selector);
+            that.echo('++++ Found ' + selector + ' for ' + username);
             that.click(selector);
         },
         function () {
-            that.echo("---- Can't find " + selector);
-            that.capture('no' + selector + '.png');
+            that.echo("---- Can't find " + selector + ' for ' + username);
+            that.capture('no' + selector + 'For' + username + '.png');
         },
         waitAndClickTime
     );
@@ -29,16 +29,28 @@ function checkForText(text, that) {
     that.waitForText(
         text,
         function () {
-            that.echo('++++ Found ' + text);
+            that.echo('++++ Found ' + text + ' for ' + username);
         },
         function () {
-            that.echo("---- Can't find  " + text);
-            that.capture('no' + text + '.png');
+            that.echo("---- Can't find  " + text + ' for ' + username);
+            that.capture('no' + text + 'For' + username + '.png');
         },
         waitForTextTime
     );
 };
 
+// Returns a random integer between min (included) and max (included)
+// Using Math.round() will give you a non-uniform distribution!
+function getRandomIntInclusive(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomClicks(selector, that) {
+    for (var i = 0; 0 < 5; i++) {
+        that.wait(getRandomIntInclusive(500, 5000));
+        that.click(selector);
+    }
+};
 
 casper.start('http://localhost:3000');
 
@@ -97,7 +109,32 @@ casper.then(function () {
     checkForText("Game ends in", this);
 });
 
+casper.then(function () {
+    var selector = '#bot-button';
+    this.waitForSelector(
+        selector,
+        function () {
+            this.echo('++++ Found ' + selector);
+            //randomClicks(selector, this);
+            this.wait(5000);
+            this.click(selector);
+            this.wait(5000);
+            this.click(selector);
+            this.wait(5000);
+            this.click(selector);
+        },
+        function () {
+            this.echo("---- Can't find " + selector);
+            this.capture('no' + selector + '.png');
+        },
+        waitAndClickTime
+    );
+});
 
-// this.click('#bot-button');
+casper.wait(1000);
+
+casper.then(function () {
+    this.capture(username + '.png');
+});
 
 casper.run();
