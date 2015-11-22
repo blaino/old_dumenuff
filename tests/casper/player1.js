@@ -7,6 +7,38 @@ var casper = require('casper').create({
 casper.options.viewportSize = {width: 700, height: 600};
 
 var username = casper.cli.get("username");
+var waitAndClickTime = 5000;
+var waitForTextTime = 5000;
+
+function waitAndClick(selector, that) {
+    that.waitForSelector(
+        selector,
+        function () {
+            that.echo('++++ Found ' + selector);
+            that.click(selector);
+        },
+        function () {
+            that.echo("---- Can't find " + selector);
+            that.capture('no' + selector + '.png');
+        },
+        waitAndClickTime
+    );
+};
+
+function checkForText(text, that) {
+    that.waitForText(
+        text,
+        function () {
+            that.echo('++++ Found ' + text);
+        },
+        function () {
+            that.echo("---- Can't find  " + text);
+            that.capture('no' + text + '.png');
+        },
+        waitForTextTime
+    );
+};
+
 
 casper.start('http://localhost:3000');
 
@@ -14,28 +46,21 @@ casper.wait(1000);
 
 casper.then(function () {
     // if logged in, log out before logging in
-    this.capture('catpure.png');
     if (this.exists('#login-name-link')) {
-        this.echo('==== found #login-name-link');
+        this.echo('++++ found #login-name-link');
         this.click('#login-name-link');
-        this.waitForSelector('#login-buttons-logout', function () {
-            this.click('#login-buttons-logout');
-            this.capture('afterLogout.png');
-        });
+        waitAndClick('#login-buttons-logout', this);
     }
 });
 
 casper.then(function () {
-    this.waitForSelector('#login-sign-in-link', function () {
-        this.echo('==== found #login-sign-in-link');
-        this.click('#login-sign-in-link');
-    });
+    waitAndClick('#login-sign-in-link', this);
 });
 
 casper.then(function() {
-    this.echo('==== going to wait for username/password field');
+    this.echo('++++ going to wait for username/password field');
     this.waitForSelector('#login-buttons-password', function () {
-        this.echo('==== See #login-buttons-password');
+        this.echo('++++ See #login-buttons-password');
     });
 });
 
@@ -49,10 +74,7 @@ casper.thenEvaluate(function(username, password) {
 casper.thenClick('#login-buttons-password');
 
 casper.then(function () {
-    this.waitForText(username, function () {
-        this.echo('==== Found ' + username);
-        this.capture('with' + username + '.png');
-    });
+    checkForText(username, this);
 });
 
 casper.then(function () {
@@ -62,36 +84,20 @@ casper.then(function () {
     }
 });
 
-
 casper.then(function () {
-    this.waitForText("Waiting", function () {
-        this.echo('==== Found Waiting');
-        this.capture('foundWaiting.png');
-    });
+    checkForText("Waiting", this);
 });
 
 
 casper.then(function () {
-    //this.waitForSelector("button[id='#join-button']:enabled", function () {
-    this.waitForSelector("#join-button", function () {
-        this.echo('==== found join button');
-        this.click('#join-button');
-        this.capture('join1.png');
-    });
+    waitAndClick('#join-button', this);
 });
 
 casper.then(function () {
-    this.waitForText("Game ends in",
-                     function () {
-                         this.echo('==== Found Game ends in');
-                         this.click('#bot-button');
-                         this.capture('score1.png');
-                     },
-                     function () {
-                         this.echo('==== Cannot find Game ends in');
-                         this.capture('errorScore1.png');
-                     },
-                     6000);
+    checkForText("Game ends in", this);
 });
+
+
+// this.click('#bot-button');
 
 casper.run();
