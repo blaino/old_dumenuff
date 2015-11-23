@@ -10,6 +10,10 @@ var username = casper.cli.get("username");
 var waitAndClickTime = 5000;
 var waitForTextTime = 5000;
 
+casper.on('remote.message', function(message) {
+    this.echo(message);
+});
+
 function waitAndClick(selector, that) {
     that.waitForSelector(
         selector,
@@ -114,7 +118,7 @@ casper.then(function () {
     this.waitForSelector(
         selector,
         function () {
-            this.echo('++++ Found ' + selector);
+            this.echo('++++ Found ' + selector + ' for ' + username);
             //randomClicks(selector, this);
             this.wait(5000);
             this.click(selector);
