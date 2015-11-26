@@ -1,17 +1,24 @@
 var casper = require('casper').create({
     verbose: true,
     logLevel: "debug",
-    userAgent: 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36'
+    userAgent: 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36',
+    viewportSize: {width: 700, height: 600}
 });
-
-casper.options.viewportSize = {width: 700, height: 600};
 
 var username = casper.cli.get("username");
 var waitAndClickTime = 5000;
 var waitForTextTime = 5000;
 
-casper.on('remote.message', function(message) {
-    this.echo(message);
+casper.on("remote.message", function(msg) {
+    this.echo("Console: " + msg);
+});
+
+casper.on("page.error", function(msg, trace) {
+    this.echo("Error: " + msg);
+});
+
+casper.on("resource.error", function(resourceError) {
+    this.echo("ResourceError: " + JSON.stringify(resourceError, undefined, 4));
 });
 
 function waitAndClick(selector, that) {
@@ -48,13 +55,6 @@ function checkForText(text, that) {
 function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-function randomClicks(selector, that) {
-    for (var i = 0; 0 < 5; i++) {
-        that.wait(getRandomIntInclusive(500, 5000));
-        that.click(selector);
-    }
-};
 
 casper.start('http://localhost:3000');
 
@@ -113,32 +113,41 @@ casper.then(function () {
     checkForText("Game ends in", this);
 });
 
+function randomClicks(selector, that) {
+    that.wait(getRandomIntInclusive(4000, 6000), function () {
+        this.echo("+click 1");
+        waitAndClick(selector, this);
+        that.wait(getRandomIntInclusive(4000, 6000), function () {
+            this.echo("+click 2");
+            waitAndClick(selector, this);
+        });
+    });
+
+};
+
 casper.then(function () {
-    var selector = '#bot-button';
-    this.waitForSelector(
-        selector,
-        function () {
-            this.echo('++++ Found ' + selector + ' for ' + username);
-            //randomClicks(selector, this);
-            this.wait(5000);
-            this.click(selector);
-            this.wait(5000);
-            this.click(selector);
-            this.wait(5000);
-            this.click(selector);
-        },
-        function () {
-            this.echo("---- Can't find " + selector);
-            this.capture('no' + selector + '.png');
-        },
-        waitAndClickTime
-    );
+    // var selector = '#bot-button';
+    var selector = "button[id='bot-button']:enabled";
+    randomClicks(selector, this);
+
+    // this.waitForSelector(
+    //     selector,
+    //     function () {
+    //         this.echo('++++ Found ' + selector + ' for ' + username);
+    //         randomClicks(selector, this);
+    //     },
+    //     function () {
+    //         this.echo("---- Can't find " + selector + ' for ' + username);
+    //         this.capture('no' + selector + username + '.png');
+    //     },
+    //     waitAndClickTime
+    // );
 });
 
-casper.wait(1000);
-
 casper.then(function () {
-    this.capture(username + '.png');
+    casper.wait(1000, function () {
+        this.capture(username + '.png');
+    });
 });
 
 casper.run();

@@ -57,6 +57,7 @@ Template.footer.events({
 
 Template.listings.events({
     'click #bot-button': function () {
+        console.log('****** Trying to click');
         var lobby = Channels.findOne({name: 'lobby'});
         Session.set('channel', lobby.name);
 
@@ -66,6 +67,7 @@ Template.listings.events({
                 console.log('click bot: ', error);
             }
             else {
+                console.log('****** clicking', playerId, room._id);
                 Meteor.call('scoreAndRematch', playerId, "bot", room);
             }
         });
@@ -96,10 +98,10 @@ Template.listings.events({
         }
     },
     'click #start-button': function () {
-        var readyTime = 5,
-            gameTime = 300,
-            numPlayers = 5,
-            percentBot = 50;
+        var readyTime = Meteor.settings.public.readyTime,
+            gameTime = Meteor.settings.public.gameTime,
+            numPlayers = Meteor.settings.public.numPlayers,
+            percentBot = Meteor.settings.public.percentBot;
 
         Meteor.call('cleanUp');
         Meteor.call('newGame', readyTime, gameTime, numPlayers, percentBot);

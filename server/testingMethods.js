@@ -85,9 +85,14 @@ Meteor.methods({
     // Called on startup
     newGame: function (readyTime, gameTime, numPlayers, percentBot) {
         var oldGame = Game.findOne({});
-        Game.insert({state: "Waiting", readyTime: readyTime, gameTime: gameTime,
-                     numPlayers: numPlayers, percentBot: percentBot, numReady: 0,
-                     threshold: 2, pauseTime: 10000});
+        Game.insert({state: "Waiting",
+                     readyTime: readyTime,
+                     gameTime: gameTime,
+                     numPlayers: numPlayers,
+                     percentBot: percentBot,
+                     numReady: 0,
+                     threshold: Meteor.settings.public.threshold,
+                     pauseTime: Meteor.settings.public.pauseTime});
         Game.remove(oldGame);
     },
 
