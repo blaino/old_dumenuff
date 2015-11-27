@@ -6,6 +6,7 @@ Meteor.methods({
         Channels.remove({});
         Scores.remove({});
         Waiting.remove({});
+        Game.remove({});
 
         Channels.insert({name: "lobby"});
     },
