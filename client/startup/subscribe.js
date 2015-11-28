@@ -1,5 +1,7 @@
 Meteor.subscribe('channels');
 
+Meteor.subscribe('rooms');
+
 Meteor.subscribe('allUsernames');
 
 Meteor.subscribe('scores');

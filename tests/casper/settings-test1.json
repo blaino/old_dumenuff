@@ -5,7 +5,8 @@
         "numPlayers": 2,
         "percentBot": 100,
         "threshold": 1,
-        "shufflePause": 6000
+        "shufflePause": 6000,
+        "minChatTime": 3
     },
     "private": {
         "hackTheGibson": "keyboardCoWbOyS"

@@ -17,7 +17,7 @@ Meteor.publish('scores', function () {
 });
 
 Meteor.publish('rooms', function () {
-    return Scores.find();
+    return Rooms.find();
 });
 
 Meteor.publish('game', function () {

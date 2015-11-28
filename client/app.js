@@ -34,11 +34,23 @@ Template.listings.helpers({
             var state = game.state;
             if (state != "Started") {
                 return true;
-            };
+            }
         };
 
         if (Session.get('channel') == 'lobby') {
             return true;
+        }
+
+        var channel = Channels.findOne({name: Session.get('channel')});
+        if (channel) {
+            var channelName = channel.name;
+            var room = Rooms.findOne({_id: channelName});
+            if (room) {
+                var minChatTime = Meteor.settings.public.minChatTime * 1000;
+                if ((Date.now() - room.liveTime) < minChatTime) {
+                    return true;
+                }
+            }
         }
     },
     joinButtonDisabled: function () {

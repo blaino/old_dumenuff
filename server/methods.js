@@ -95,6 +95,8 @@ Meteor.methods({
                 room = {player1: oldest.player, player2: "bot"};
             };
 
+            room.liveTime = Date.now();
+
             // add channel
             Rooms.insert(room, function (error, roomId) {
                 if (error) {
