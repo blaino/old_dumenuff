@@ -99,7 +99,7 @@ describe('methods', function () {
         it("should set loser score to -1 for first time update", function () {
             Meteor.call('updateScore', winner._id, loser._id);
             var afterScore = Scores.findOne({player: loser._id});
-            expect(afterScore.score).toEqual(-1);
+            expect(afterScore.score).toEqual(-2);
         });
 
         it("should decrement score for loser", function () {
@@ -107,7 +107,7 @@ describe('methods', function () {
             var beforeScore = Scores.findOne({player: loser._id}).score;
             Meteor.call('updateScore', winner._id, loser._id);
             var afterScore = Scores.findOne({player: loser._id}).score;
-            expect(afterScore).toEqual(beforeScore - 1);
+            expect(afterScore).toEqual(beforeScore - 2);
         });
     });
 
@@ -369,7 +369,7 @@ describe('methods', function () {
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
                 var afterScorePlayer2 = Scores.findOne({player: otherPlayerId}).score;
 
-                expect(afterScorePlayer1).toEqual(-1);
+                expect(afterScorePlayer1).toEqual(-2);
                 expect(afterScorePlayer2).toEqual(1);
             });
         });
@@ -404,7 +404,7 @@ describe('methods', function () {
 
                 var afterScorePlayer1 = Scores.findOne({player: playerId}).score;
 
-                expect(afterScorePlayer1).toEqual(-1);
+                expect(afterScorePlayer1).toEqual(-2);
             });
 
         });
@@ -546,10 +546,10 @@ describe('methods', function () {
             var game = Game.findOne({});
             var percentBot = game.percentBot;
             var threshold = game.threshold;
-            var pauseTime = game.pauseTime;
+            var shufflePause = game.shufflePause;
 
             expect(Meteor.call).toHaveBeenCalledWith('matchPlayers', percentBot, threshold,
-                                                     pauseTime);
+                                                     shufflePause);
         });
 
     });

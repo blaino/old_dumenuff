@@ -46,10 +46,10 @@ Meteor.methods({
 
             if (loserScore) {
                 // console.log('updating loser');
-                Scores.update({player: loserId}, {$inc: {score: -1}});
+                Scores.update({player: loserId}, {$inc: {score: -2}});
             } else {
-                // console.log('adding loser to Score with score -1');
-                Scores.insert({player: loserId, score: -1});
+                // console.log('adding loser to Score with score -2');
+                Scores.insert({player: loserId, score: -2});
             };
         };
     },
@@ -158,6 +158,7 @@ Meteor.methods({
 
     scoreAndRematch: function(playerId, selection, room) {
         // Delete room, channels
+        console.log('deleting room: ', room);
         Rooms.remove(room);
         Channels.remove({name: room._id});
 
