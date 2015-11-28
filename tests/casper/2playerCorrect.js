@@ -17,7 +17,7 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-casper.test.begin('After 3 correct clicks, scores should be 3', 3, function (test) {
+casper.test.begin('After 3 correct clicks, scores should be 3', 4, function (test) {
 
     var username = casper.cli.get("username");
 
@@ -102,6 +102,10 @@ casper.test.begin('After 3 correct clicks, scores should be 3', 3, function (tes
     casper.then(function () {
         var selector = "button[id='bot-button']:enabled";
         threeRandomClicks(selector, this);
+    });
+
+    casper.then(function () {
+        checkForText("3", this);
     });
 
     casper.then(function () {
