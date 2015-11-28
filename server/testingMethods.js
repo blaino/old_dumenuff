@@ -26,7 +26,7 @@ Meteor.methods({
         };
     },
 
-    matchPlayers: function (percentBot, threshold, pauseTime) {
+    matchPlayers: function (percentBot, threshold, shufflePause) {
         var waiting = Waiting.find({}).fetch().length;
         while (waiting >= threshold) {
             Meteor.call('match', percentBot);
@@ -34,7 +34,7 @@ Meteor.methods({
         };
     },
 
-    matchPlayersComplex: function (percentBot, threshold, pauseTime) {
+    matchPlayersComplex: function (percentBot, threshold, shufflePause) {
         var waiting = Waiting.find({}).fetch().length;
         while (waiting >= threshold) {
             Meteor.call('match', percentBot);
@@ -42,7 +42,7 @@ Meteor.methods({
         };
         waiting = Waiting.find({}).fetch().length;
         if (waiting > 0) {
-            Meteor._sleepForMs(pauseTime);
+            Meteor._sleepForMs(shufflePause);
             while (waiting > 0) {
                 Meteor.call('match', percentBot);
                 waiting = Waiting.find({}).fetch().length;
@@ -93,7 +93,7 @@ Meteor.methods({
                      percentBot: percentBot,
                      numReady: 0,
                      threshold: Meteor.settings.public.threshold,
-                     pauseTime: Meteor.settings.public.pauseTime});
+                     shufflePause: Meteor.settings.public.shufflePause});
         Game.remove(oldGame);
     },
 
@@ -119,9 +119,9 @@ Meteor.methods({
         var percentBot = game.percentBot;
         var timerId;
         var threshold = game.threshold;
-        var pauseTime = 6000;
+        var shufflePause = Meteor.settings.public.shufflePause;
 
-        Meteor.call('matchPlayers', percentBot, threshold, pauseTime);
+        Meteor.call('matchPlayers', percentBot, threshold, shufflePause);
 
         function decGameTime () {
             Game.update({}, {$inc: {gameTime: -1}});
