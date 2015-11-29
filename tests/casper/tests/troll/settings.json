@@ -1,0 +1,15 @@
+{
+    "public": {
+        "readyTime": 0,
+        "gameTime": 50,
+        "numPlayers": 2,
+        "percentBot": 100,
+        "threshold": 1,
+        "shufflePause": 6000,
+        "minChatTime": 3
+    },
+    "private": {
+        "hackTheGibson": "keyboardCoWbOyS"
+    },
+    "imStillServerOnly": "soDontPanic"
+}

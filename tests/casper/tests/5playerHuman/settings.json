@@ -1,0 +1,11 @@
+{
+    "public": {
+        "readyTime": 0,
+        "gameTime": 50,
+        "numPlayers": 5,
+        "percentBot": 0,
+        "threshold": 2,
+        "shufflePause": 6000,
+        "minChatTime": 3
+    }
+}

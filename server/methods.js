@@ -160,7 +160,6 @@ Meteor.methods({
 
     scoreAndRematch: function(playerId, selection, room) {
         // Delete room, channels
-        console.log('deleting room: ', room);
         Rooms.remove(room);
         Channels.remove({name: room._id});
 
