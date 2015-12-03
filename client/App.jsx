@@ -113,6 +113,8 @@ App = React.createClass({
                         Start
                     </button>
                 </div>
+
+                <Play/>
             </div>
         );
     }

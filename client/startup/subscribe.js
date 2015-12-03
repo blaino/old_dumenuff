@@ -10,9 +10,11 @@ Meteor.subscribe('game');
 
 Meteor.subscribe('waiting');
 
-Template.messages.onCreated(function() {
-  var self = this;
-  self.autorun(function() {
-    self.subscribe('messages', Session.get('channel'));
-  });
-});
+Meteor.subscribe('messages', Session.get('channel'));
+
+// Template.messages.onCreated(function() {
+//   var self = this;
+//   self.autorun(function() {
+//     self.subscribe('messages', Session.get('channel'));
+//   });
+// });
