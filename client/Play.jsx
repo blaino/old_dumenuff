@@ -11,6 +11,11 @@ Play = React.createClass({
     getMeteorData() {
         return {
             messages: Messages.find({}).fetch(),
+            lobby: Channels.findOne({name: 'lobby'}),
+            game: Game.findOne({}),
+            channel: Channels.findOne({name: Session.get('channel')}),
+            rooms: Rooms.find({}).fetch(),
+            scores: Scores.find({}).fetch(),
         }
     },
 
@@ -33,7 +38,7 @@ Play = React.createClass({
 
         Meteor.call('findRoom', userId, function (error, room) {
             if (error) {
-                console.log('keypress input, findRoom(): ', error);
+                console.log('handleSubmit, findRoom(): ', error);
             } else {
                 Meteor.call(
                     'newMessage',
@@ -70,8 +75,76 @@ Play = React.createClass({
         React.findDOMNode(this.refs.textInput).value = "";
     },
 
+    clickBotButton() {
+        console.log('****** Trying to click');
+        var lobby = this.data.lobby;
+        Session.set('channel', lobby.name);
+
+        var playerId = Meteor.userId();
+        var room = Meteor.call('findRoom', playerId, function (error, room) {
+            if (error) {
+                console.log('click bot: ', error);
+            }
+            else {
+                console.log('****** clicking', playerId, room._id);
+                Meteor.call('scoreAndRematch', playerId, "bot", room);
+            }
+        });
+    },
+
+    clickHumanButton() {
+        var lobby = this.data.lobby;
+        Session.set('channel', lobby.name);
+
+        var playerId = Meteor.userId();
+        var room = Meteor.call('findRoom', playerId, function (error, room) {
+            if (error) {
+                console.log('click human: ', error);
+            }
+            else {
+                Meteor.call('scoreAndRematch', playerId, "human", room);
+            }
+        });
+    },
+
+    buttonsDisabled() {
+        var game = this.data.game;
+        if (game) {
+            var state = game.state;
+            if (state != "Started") {
+                return true;
+            }
+        };
+
+        if (Session.get('channel') == 'lobby') {
+            return true;
+        }
+
+        var channel = this.data.channel;
+        if (channel) {
+            var channelName = channel.name;
+            var room = this.data.rooms.find(x => x._id == channelName);
+            if (room) {
+                var minChatTime = Meteor.settings.public.minChatTime * 1000;
+                if ((Date.now() - room.liveTime) < minChatTime) {
+                    return true;
+                }
+            }
+        }
+    },
+
+    thisPlayersScore() {
+        var playerScore = this.data.scores.find(x => x.player == Meteor.userId());
+        var score = 0;
+        if (playerScore) {
+            score = playerScore.score;
+        }
+        return score;
+    },
+
     renderMessages() {
         return this.data.messages.map((message) => {
+            // console.log('message in renderMessages', message);
             return (
                 <li>
                     <span>
@@ -85,16 +158,33 @@ Play = React.createClass({
     render() {
         return (
             <div>
+                <span>{Session.get('channel')}</span>
                 <ul>
                     {this.renderMessages()}
                 </ul>
-
                 <form className="input-box_text" onSubmit={this.handleSubmit} >
                     <input
                         type="text"
                         ref="textInput"
                         placeholder="Type your message here" />
                 </form>
+                <br></br>
+                <div className="buttons">
+                    <button onClick={this.clickBotButton}
+                            disabled={this.buttonsDisabled()}>
+                        Bot
+                    </button>
+                    <button onClick={this.clickHumanButton}
+                            disabled={this.buttonsDisabled()}>
+                        Human
+                    </button>
+                </div>
+                <br></br>
+                <div>
+                    <span>score</span>
+                    <span>{this.thisPlayersScore()}</span>
+                </div>
+
             </div>
         );
     }

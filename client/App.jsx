@@ -96,23 +96,24 @@ App = React.createClass({
                     <h1>dumenuff</h1>
                     <AccountsUIWrapper />
                     <div class="time-remaining">{this.gameState()}</div>
+
+
+                    <div class="join-button">
+                        <button id="join-button"
+                                disabled={this.joinButtonDisabled()}
+                                onClick={this.clickJoinButton}>
+                            Join
+                        </button>
+                    </div>
+
+                    <div class="start-button">
+                        <button id="start-button"
+                                disabled={this.startButtonDisabled()}
+                                onClick={this.clickStartButton}>
+                            Start
+                        </button>
+                    </div>
                 </header>
-
-                <div class="join-button">
-                    <button id="join-button"
-                            disabled={this.joinButtonDisabled()}
-                            onClick={this.clickJoinButton}>
-                        Join
-                    </button>
-                </div>
-
-                <div class="start-button">
-                    <button id="start-button"
-                            disabled={this.startButtonDisabled()}
-                            onClick={this.clickStartButton}>
-                        Start
-                    </button>
-                </div>
 
                 <Play/>
             </div>
