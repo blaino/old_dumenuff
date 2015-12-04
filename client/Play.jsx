@@ -1,3 +1,13 @@
+const {
+    List,
+    ListItem,
+    ListDivider,
+    RaisedButton,
+    TextField
+} = mui;
+
+const ThemeManager = new mui.Styles.ThemeManager();
+
 Play = React.createClass({
     // This mixin makes the getMeteorData method work
     mixins: [ReactMeteorData],
@@ -7,6 +17,16 @@ Play = React.createClass({
         // We can use propTypes to indicate it is required
     //        task: React.PropTypes.object.isRequired
     //},
+
+    childContextTypes: {
+        muiTheme: React.PropTypes.object
+    },
+
+    getChildContext: function() {
+        return {
+            muiTheme: ThemeManager.getCurrentTheme()
+        };
+    },
 
     getMeteorData() {
         return {
@@ -28,9 +48,11 @@ Play = React.createClass({
     },
 
     handleSubmit(e) {
+
         e.preventDefault();
 
-        var messageText = React.findDOMNode(this.refs.textInput).value.trim();
+        /* var messageText = React.findDOMNode(this.refs.textInput).value.trim(); */
+        var messageText = this.refs.textInput.getValue();
         var userId = Meteor.userId();
 
         console.log('messageText', messageText);
@@ -72,7 +94,7 @@ Play = React.createClass({
                 };
             };
         });
-        React.findDOMNode(this.refs.textInput).value = "";
+        this.refs.textInput.setValue("");
     },
 
     clickBotButton() {
@@ -144,45 +166,53 @@ Play = React.createClass({
 
     renderMessages() {
         return this.data.messages.map((message) => {
-            // console.log('message in renderMessages', message);
-            return (
-                <li>
-                    <span>
-                        {this.playerName(message.user)}: {message.text}
-                    </span>
-                </li>
-            );
+            var line = this.playerName(message.user) + ': ' + message.text;
+            return [
+                <ListItem key={ message._id }
+                primaryText={this.playerName(message.user)}
+                secondaryText={message.text}/>,
+
+
+                <ListDivider/>
+            ];
         });
     },
 
     render() {
         return (
             <div>
-                <span>{Session.get('channel')}</span>
+                <div className="subtitle">channel: {Session.get('channel')}</div>
+
                 <ul>
                     {this.renderMessages()}
                 </ul>
-                <form className="input-box_text" onSubmit={this.handleSubmit} >
-                    <input
-                        type="text"
+
+                <form onSubmit={this.handleSubmit}>
+                    <TextField
                         ref="textInput"
-                        placeholder="Type your message here" />
+                        hintText="Message your opponent"
+                        fullWidth={true}/>
                 </form>
                 <br></br>
-                <div className="buttons">
-                    <button onClick={this.clickBotButton}
-                            disabled={this.buttonsDisabled()}>
-                        Bot
-                    </button>
-                    <button onClick={this.clickHumanButton}
-                            disabled={this.buttonsDisabled()}>
-                        Human
-                    </button>
-                </div>
-                <br></br>
-                <div>
-                    <span>score</span>
-                    <span>{this.thisPlayersScore()}</span>
+
+                <RaisedButton
+                    disabled={this.buttonsDisabled()}
+                    onClick={this.clickBotButton}
+                    style={{float: "left",
+                            margin: "10px"}}
+                    label="Bot"
+                    primary={true}/>
+
+                <RaisedButton
+                    disabled={this.buttonsDisabled()}
+                    onClick={this.clickHumanButton}
+                    style={{float: "left",
+                            margin: "10px"}}
+                    label="Human"
+                    primary={true}/>
+
+                <div className="title">
+                    Score: {this.thisPlayersScore()}
                 </div>
 
             </div>

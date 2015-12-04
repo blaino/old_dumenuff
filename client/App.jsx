@@ -1,3 +1,9 @@
+const {
+    RaisedButton
+} = mui;
+
+const ThemeManager = new mui.Styles.ThemeManager();
+
 // App component - represents the whole app
 App = React.createClass({
 
@@ -12,6 +18,16 @@ App = React.createClass({
         }
     },
     /* getInitialState() {}, */
+
+    childContextTypes: {
+        muiTheme: React.PropTypes.object
+    },
+
+    getChildContext: function() {
+        return {
+            muiTheme: ThemeManager.getCurrentTheme()
+        };
+    },
 
     gameState: function () {
         var game = this.data.game;
@@ -91,29 +107,29 @@ App = React.createClass({
 
     render() {
         return (
-            <div className="container">
-                <header>
-                    <h1>dumenuff</h1>
-                    <AccountsUIWrapper />
-                    <div class="time-remaining">{this.gameState()}</div>
+            <div className="outer">
 
+                <h1 className="title">dumenuff</h1>
 
-                    <div class="join-button">
-                        <button id="join-button"
-                                disabled={this.joinButtonDisabled()}
-                                onClick={this.clickJoinButton}>
-                            Join
-                        </button>
-                    </div>
+                <AccountsUIWrapper />
 
-                    <div class="start-button">
-                        <button id="start-button"
-                                disabled={this.startButtonDisabled()}
-                                onClick={this.clickStartButton}>
-                            Start
-                        </button>
-                    </div>
-                </header>
+                <div className="subtitle">{this.gameState()}</div>
+
+                <RaisedButton
+                    disabled={this.joinButtonDisabled()}
+                    onClick={this.clickJoinButton}
+                    style={{float: "left",
+                            margin: "10px"}}
+                    label="Join"
+                    primary={true}/>
+
+                <RaisedButton
+                    disabled={this.startButtonDisabled()}
+                    onClick={this.clickStartButton}
+                    style={{float: "left",
+                            margin: "10px"}}
+                    label="Start"
+                    primary={true}/>
 
                 <Play/>
             </div>

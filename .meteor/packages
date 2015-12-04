@@ -31,3 +31,4 @@ sanjo:jasmine
 velocity:console-reporter
 velocity:html-reporter
 react
+cosmos:browserify
