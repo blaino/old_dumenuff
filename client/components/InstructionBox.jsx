@@ -5,6 +5,7 @@ InstructionBox = React.createClass({
     getMeteorData() {
         return {
             game: Game.findOne({}),
+            playerInWaiting: Waiting.findOne({player: Meteor.userId()}),
         }
     },
 
@@ -48,7 +49,7 @@ InstructionBox = React.createClass({
 
             if (state == 'Ended') {
                 renderFunction = this.renderLeaderBoard;
-            } else if (state == 'Waiting' || state == 'Readying') {
+            } else if (this.data.playerInWaiting) {
                 renderFunction = this.renderInstructions;
             }
         }
