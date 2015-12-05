@@ -10,6 +10,6 @@ AccountsUIWrapper = React.createClass({
     },
     render() {
         // Just render a placeholder container that will be filled in
-        return <span ref="container" />;
+        return <div className="signin" ref="container" />;
     }
 });
