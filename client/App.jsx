@@ -9,6 +9,7 @@ App = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData() {
+        Meteor.subscribe('game');
         return {
             game: Game.findOne({}),
         }

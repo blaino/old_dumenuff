@@ -14,6 +14,10 @@ PlayBar = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData() {
+        Meteor.subscribe('game');
+        Meteor.subscribe('channels');
+        Meteor.subscribe('rooms');
+
         return {
             lobby: Channels.findOne({name: 'lobby'}),
             game: Game.findOne({}),

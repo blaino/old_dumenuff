@@ -9,6 +9,8 @@ SplashFooter = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData() {
+        Meteor.subscribe('game');
+        Meteor.subscribe('waiting');
         return {
             game: Game.findOne({}),
             playerInWaiting: Waiting.findOne({player: Meteor.userId()}),

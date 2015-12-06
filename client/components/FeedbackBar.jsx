@@ -12,6 +12,8 @@ FeedbackBar = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData() {
+        Meteor.subscribe('game');
+        Meteor.subscribe('scores');
         return {
             game: Game.findOne({}),
             scores: Scores.find({}).fetch(),
