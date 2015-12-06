@@ -36,8 +36,8 @@ PlayBar = React.createClass({
 
         e.preventDefault();
 
-        /* var messageText = React.findDOMNode(this.refs.textInput).value.trim(); */
         var messageText = this.refs.textInput.getValue();
+        this.refs.textInput.setValue("");
         var userId = Meteor.userId();
 
         console.log('messageText', messageText);
@@ -57,10 +57,7 @@ PlayBar = React.createClass({
                     }
                 );
 
-                $('.input-box_text').val("");
-
                 if (room.player2 == "bot") {
-                    // TODO: pull out into a function???
                     Meteor.call('reply', messageText, function (error, result) {
                         if (error) {
                             console.log('keypress input, reply(): ', error);
@@ -79,7 +76,6 @@ PlayBar = React.createClass({
                 };
             };
         });
-        this.refs.textInput.setValue("");
     },
 
     clickBotButton() {

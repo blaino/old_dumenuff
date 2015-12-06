@@ -35,11 +35,12 @@ App = React.createClass({
             var state = game.state;
 
             if (state == 'Started') {
+
                 renderFunction = this.renderPlay;
             }
         }
 
-        renderFunction = this.renderPlay;
+        /* renderFunction = this.renderPlay; */
 
         return (
             <div className="outer">

@@ -8,7 +8,7 @@ const {
 const ThemeManager = new mui.Styles.ThemeManager();
 
 FeedbackBar = React.createClass({
-    // This mixin makes the getMeteorData method work
+
     mixins: [ReactMeteorData],
 
     getMeteorData() {

@@ -32,17 +32,6 @@ SplashFooter = React.createClass({
             var state = game.state;
             if (state == "Readying") {
                 return "Game starts in " + game.readyTime + " seconds";
-            } else if (state == "Started") {
-                if (Meteor.userId()) {
-                    Meteor.call('findRoom', Meteor.userId(), function (error, room) {
-                        if (error) {
-                            Session.set('channel', 'lobby');
-                        } else {
-                            Session.set('channel', room._id);
-                        };
-                    });
-                };
-                return "Game ends in " + game.gameTime + " seconds";
             } else if (state == "Ended") {
                 return "Game over";
             } else {
@@ -81,6 +70,7 @@ SplashFooter = React.createClass({
 
     clickJoinButton: function () {
         var user = Meteor.userId();
+        console.log('Joining user', user);
         if (user) {
             Meteor.call('addPlayer', user);
             Meteor.call('checkReady', function (error, isReady) {

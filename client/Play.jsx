@@ -36,12 +36,12 @@ Play = React.createClass({
 
     renderMessages() {
         return this.data.messages.map((message) => {
+            console.log('trying to render message', message);
             var line = this.playerName(message.user) + ': ' + message.text;
             return [
                 <ListItem key={ message._id }
                 primaryText={this.playerName(message.user)}
                 secondaryText={message.text}/>,
-
 
                 <ListDivider/>
             ];
@@ -49,6 +49,17 @@ Play = React.createClass({
     },
 
     render() {
+
+        Meteor.call('findRoom', Meteor.userId(), function (error, room) {
+            if (error) {
+                /* console.log('Cannot find room for: ', Meteor.userId()); */
+                Session.set('channel', 'lobby');
+            } else {
+                /* console.log('Game starting setting room to: ', room._id); */
+                Session.set('channel', room._id);
+            };
+        });
+
         return (
             <div>
                 <FeedbackBar />
