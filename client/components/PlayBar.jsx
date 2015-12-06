@@ -24,6 +24,7 @@ PlayBar = React.createClass({
             channel: Channels.findOne({name: Session.get('channel')}),
             rooms: Rooms.find({}).fetch(),
             userId: Meteor.userId(),
+            sessionChannel: Session.get('channel'),
         }
     },
 
@@ -124,7 +125,7 @@ PlayBar = React.createClass({
             }
         };
 
-        if (Session.get('channel') == 'lobby') {
+        if (this.data.sessionChannel == 'lobby') {
             return true;
         }
 
@@ -143,19 +144,21 @@ PlayBar = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="playbar">
                 <form onSubmit={this.handleSubmit}>
                     <TextField
                         ref="textInput"
                         hintText="Message your opponent"
-                        fullWidth={true}/>
+                        fullWidth={true}
+                    />
                 </form>
 
                 <RaisedButton
                     disabled={this.buttonsDisabled()}
                     onClick={this.clickBotButton}
                     style={{float: "left",
-                            margin: "10px"}}
+                            margin: "10px",
+                           }}
                     label="Bot"
                     primary={true}/>
 
@@ -163,7 +166,8 @@ PlayBar = React.createClass({
                     disabled={this.buttonsDisabled()}
                     onClick={this.clickHumanButton}
                     style={{float: "right",
-                            margin: "10px"}}
+                            margin: "10px",
+                           }}
                     label="Human"
                     primary={true}/>
             </div>

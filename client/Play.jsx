@@ -20,7 +20,7 @@ Play = React.createClass({
         });
 
         return (
-            <div>
+            <div className="playpage">
                 <FeedbackBar />
 
                 <MessageList />

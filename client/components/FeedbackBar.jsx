@@ -50,7 +50,7 @@ FeedbackBar = React.createClass({
         var playingText = Session.get('channel');
 
         return (
-            <div>
+            <div className="feedbackbar">
                 <Toolbar>
                     <ToolbarGroup key={0} float="left">
                         <ToolbarTitle
