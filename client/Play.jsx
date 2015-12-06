@@ -3,7 +3,11 @@ const {
     ListItem,
     ListDivider,
     RaisedButton,
-    TextField
+    TextField,
+    Toolbar,
+    ToolbarGroup,
+    ToolbarSeparator,
+    ToolbarTitle
 } = mui;
 
 const ThemeManager = new mui.Styles.ThemeManager();
@@ -11,12 +15,6 @@ const ThemeManager = new mui.Styles.ThemeManager();
 Play = React.createClass({
     // This mixin makes the getMeteorData method work
     mixins: [ReactMeteorData],
-
-    //propTypes: {
-        // This component gets the task to display through a React prop.
-        // We can use propTypes to indicate it is required
-    //        task: React.PropTypes.object.isRequired
-    //},
 
     childContextTypes: {
         muiTheme: React.PropTypes.object
@@ -35,7 +33,6 @@ Play = React.createClass({
             game: Game.findOne({}),
             channel: Channels.findOne({name: Session.get('channel')}),
             rooms: Rooms.find({}).fetch(),
-            scores: Scores.find({}).fetch(),
         }
     },
 
@@ -155,15 +152,6 @@ Play = React.createClass({
         }
     },
 
-    thisPlayersScore() {
-        var playerScore = this.data.scores.find(x => x.player == Meteor.userId());
-        var score = 0;
-        if (playerScore) {
-            score = playerScore.score;
-        }
-        return score;
-    },
-
     renderMessages() {
         return this.data.messages.map((message) => {
             var line = this.playerName(message.user) + ': ' + message.text;
@@ -181,7 +169,7 @@ Play = React.createClass({
     render() {
         return (
             <div>
-                <div className="subtitle">channel: {Session.get('channel')}</div>
+                <FeedbackBar />
 
                 <ul>
                     {this.renderMessages()}
@@ -210,10 +198,6 @@ Play = React.createClass({
                             margin: "10px"}}
                     label="Human"
                     primary={true}/>
-
-                <div className="title">
-                    Score: {this.thisPlayersScore()}
-                </div>
 
             </div>
         );

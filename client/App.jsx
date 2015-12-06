@@ -16,10 +16,10 @@ App = React.createClass({
 
     renderSplash() {
         return [
-            <h1 className="title">dumenuff</h1>,
-            <InstructionBox />,
-            <AccountsUIWrapper />,
-            <SplashFooter />
+            <h1 key={0} className="title">dumenuff</h1>,
+            <InstructionBox key={1} />,
+            <AccountsUIWrapper key={2} />,
+            <SplashFooter key={3} />
         ]
     },
 
@@ -38,6 +38,8 @@ App = React.createClass({
                 renderFunction = this.renderPlay;
             }
         }
+
+        renderFunction = this.renderPlay;
 
         return (
             <div className="outer">
