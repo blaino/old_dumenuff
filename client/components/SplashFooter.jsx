@@ -12,6 +12,7 @@ SplashFooter = React.createClass({
         return {
             game: Game.findOne({}),
             playerInWaiting: Waiting.findOne({player: Meteor.userId()}),
+            userId: Meteor.userId(),
         }
     },
 
@@ -69,7 +70,7 @@ SplashFooter = React.createClass({
     },
 
     clickJoinButton: function () {
-        var user = Meteor.userId();
+        var user = this.data.userId;
         console.log('Joining user', user);
         if (user) {
             Meteor.call('addPlayer', user);

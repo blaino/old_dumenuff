@@ -23,11 +23,12 @@ Play = React.createClass({
     getMeteorData() {
         return {
             messages: Messages.find({}).fetch(),
+            userId: Meteor.userId(),
         }
     },
 
     playerName(user) {
-        if (user && user._id == Meteor.userId()) {
+        if (user && user._id == this.data.userId) {
             return user.username;
         } else {
             return "player";
@@ -50,9 +51,9 @@ Play = React.createClass({
 
     render() {
 
-        Meteor.call('findRoom', Meteor.userId(), function (error, room) {
+        Meteor.call('findRoom', this.data.userId, function (error, room) {
             if (error) {
-                /* console.log('Cannot find room for: ', Meteor.userId()); */
+                /* console.log('Cannot find room for: ', this.data.userId); */
                 Session.set('channel', 'lobby');
             } else {
                 /* console.log('Game starting setting room to: ', room._id); */

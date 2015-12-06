@@ -19,6 +19,7 @@ PlayBar = React.createClass({
             game: Game.findOne({}),
             channel: Channels.findOne({name: Session.get('channel')}),
             rooms: Rooms.find({}).fetch(),
+            userId: Meteor.userId(),
         }
     },
 
@@ -38,7 +39,7 @@ PlayBar = React.createClass({
 
         var messageText = this.refs.textInput.getValue();
         this.refs.textInput.setValue("");
-        var userId = Meteor.userId();
+        var userId = this.data.userId;
 
         console.log('messageText', messageText);
 
@@ -83,7 +84,7 @@ PlayBar = React.createClass({
         var lobby = this.data.lobby;
         Session.set('channel', lobby.name);
 
-        var playerId = Meteor.userId();
+        var playerId = this.data.userId;
         var room = Meteor.call('findRoom', playerId, function (error, room) {
             if (error) {
                 console.log('click bot: ', error);
@@ -99,7 +100,7 @@ PlayBar = React.createClass({
         var lobby = this.data.lobby;
         Session.set('channel', lobby.name);
 
-        var playerId = Meteor.userId();
+        var playerId = this.data.userId;
         var room = Meteor.call('findRoom', playerId, function (error, room) {
             if (error) {
                 console.log('click human: ', error);
