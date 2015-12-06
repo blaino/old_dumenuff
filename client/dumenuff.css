@@ -30,14 +30,6 @@ body {
   text-align: center;
 }
 
-.instructions {
-  color: #999;
-  font-size: .875em;
-  margin: auto;
-  width: 60%;
-  border:3px solid #999;
-  padding: 10px;
-}
 .feedbackbar {
     position: fixed;
     width: 480px;

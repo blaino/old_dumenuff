@@ -36,9 +36,7 @@ MessageList = React.createClass({
     },
 
     renderMessages() {
-        /* console.log('this.data.messages', this.data.messages); */
         return this.data.messages.map((message) => {
-            /* console.log('trying to render message', message); */
             var line = this.playerName(message.user) + ': ' + message.text;
             return [
                 <ListItem key={ message._id }

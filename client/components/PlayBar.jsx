@@ -46,9 +46,6 @@ PlayBar = React.createClass({
         this.refs.textInput.setValue("");
         var userId = this.data.userId;
 
-        console.log('messageText', messageText);
-
-
         Meteor.call('findRoom', userId, function (error, room) {
             if (error) {
                 console.log('handleSubmit, findRoom(): ', error);
@@ -85,7 +82,6 @@ PlayBar = React.createClass({
     },
 
     clickBotButton() {
-        console.log('****** Trying to click');
         var lobby = this.data.lobby;
         Session.set('channel', lobby.name);
 
@@ -143,6 +139,7 @@ PlayBar = React.createClass({
     },
 
     render() {
+        var isDisabled = this.buttonsDisabled();
         return (
             <div className="playbar">
                 <form onSubmit={this.handleSubmit}>
@@ -154,7 +151,7 @@ PlayBar = React.createClass({
                 </form>
 
                 <RaisedButton
-                    disabled={this.buttonsDisabled()}
+                    disabled={isDisabled}
                     onClick={this.clickBotButton}
                     style={{float: "left",
                             margin: "10px",
@@ -163,7 +160,7 @@ PlayBar = React.createClass({
                     primary={true}/>
 
                 <RaisedButton
-                    disabled={this.buttonsDisabled()}
+                    disabled={isDisabled}
                     onClick={this.clickHumanButton}
                     style={{float: "right",
                             margin: "10px",
