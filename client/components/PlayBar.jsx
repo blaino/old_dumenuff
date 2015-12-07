@@ -112,7 +112,6 @@ PlayBar = React.createClass({
                             that.handleWinnerPair);
             }
         });
-
     },
 
     clickHumanButton() {
@@ -135,14 +134,6 @@ PlayBar = React.createClass({
     },
 
     buttonsDisabled() {
-        var game = this.data.game;
-        if (game) {
-            var state = game.state;
-            if (state != "Started") {
-                return true;
-            }
-        };
-
         if (this.data.sessionChannel == 'lobby') {
             return true;
         }
@@ -158,10 +149,18 @@ PlayBar = React.createClass({
                 }
             }
         }
+
+        return false;
     },
 
     render() {
         var isDisabled = this.buttonsDisabled();
+        if (isDisabled) {
+            $('.playbarbuttons').css('visibility', 'hidden');
+        } else {
+            $('.playbarbuttons').css('visibility', 'visible');
+        }
+
         return (
             <div className="playbar">
                 <form onSubmit={this.handleSubmit}>
@@ -172,10 +171,10 @@ PlayBar = React.createClass({
                     />
                 </form>
 
-                <div>
+                <div className="playbarbuttons">
 
                     <RaisedButton
-                        disabled={isDisabled}
+                        /* disabled={isDisabled} */
                         onClick={this.clickBotButton}
                         style={{float: "left",
                                 margin: "10px",
@@ -186,7 +185,7 @@ PlayBar = React.createClass({
                     <div className="matchstatus"></div>
 
                     <RaisedButton
-                        disabled={isDisabled}
+                        /* disabled={isDisabled} */
                         onClick={this.clickHumanButton}
                         style={{float: "right",
                                 margin: "10px",

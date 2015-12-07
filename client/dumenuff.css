@@ -42,6 +42,10 @@ body {
     bottom: 0;
 }
 
+.playbarbuttons {
+    visibility: visible;
+}
+
 .matchstatus {
     display: inline-block;
     margin-left: 85px;

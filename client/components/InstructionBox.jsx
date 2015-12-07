@@ -78,7 +78,6 @@ InstructionBox = React.createClass({
     renderLeaders() {
         return this.data.scores.map((score) => {
             var player = this.data.allUsernames.find(x => x._id == score.player);
-            console.log('player', player);
             var name = player ? player.username : score.player;
             var line = name + ": " + score.score;
             return [
@@ -91,7 +90,7 @@ InstructionBox = React.createClass({
     renderLeaderBoard() {
         return [
             <CardTitle key="{0}"
-                       title="Leaders"/>,
+                       title="Leader Board"/>,
             <CardText key="{1}">
                 {this.renderLeaders()}
             </CardText>
