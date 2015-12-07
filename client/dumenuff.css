@@ -42,6 +42,11 @@ body {
     bottom: 0;
 }
 
+.toolbartitle {
+    margin-left: 75px;
+    font-weight: 900;
+}
+
 .score {
 
 }

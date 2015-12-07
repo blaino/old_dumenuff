@@ -46,8 +46,8 @@ FeedbackBar = React.createClass({
         if (game) {
             timeText = "Time: " + game.gameTime + "s";
         }
-        // Replace later with playing/waiting
-        var playingText = Session.get('channel');
+
+        var playingText = (Session.get('channel') == "lobby") ? "Waiting" : "Playing";
 
         return (
             <div className="feedbackbar">
@@ -58,7 +58,9 @@ FeedbackBar = React.createClass({
                             className="score"/>
                     </ToolbarGroup>
                     <ToolbarGroup key={1}>
-                        <ToolbarTitle text={playingText}/>
+                        <ToolbarTitle text={playingText}
+                                      className="toolbartitle"
+                        />
                     </ToolbarGroup>
                     <ToolbarGroup key={2} float="right">
                         <ToolbarTitle text={timeText} />
