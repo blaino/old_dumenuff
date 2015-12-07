@@ -168,6 +168,9 @@ Meteor.methods({
 
         Meteor.call('updateScore', winnerPair[0], winnerPair[1]);
         Meteor.call('rematch', playerId, room);
+
+        // For client side feedback
+        return winnerPair;
     },
 
     rematch: function (playerId, room) {

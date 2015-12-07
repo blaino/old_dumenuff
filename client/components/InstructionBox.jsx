@@ -84,8 +84,6 @@ InstructionBox = React.createClass({
             return [
                 <ListItem key={ score._id }
                           primaryText={line}/>,
-
-                <ListDivider/>
             ];
         });
     },

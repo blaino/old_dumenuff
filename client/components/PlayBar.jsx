@@ -81,7 +81,24 @@ PlayBar = React.createClass({
         });
     },
 
+    getStatusMessage(winnerId) {
+        if (winnerId == this.data.userId) {
+            return "Right!";
+        } else {
+            return "Wrong!";
+        }
+    },
+
+    handleWinnerPair(error, winnerPair) {
+        var message = this.getStatusMessage(winnerPair[0]);
+        $('.matchstatus').text(message);
+        setTimeout(function () {
+            $('.matchstatus').text("");
+        }, 2000);
+    },
+
     clickBotButton() {
+        var that = this;
         var lobby = this.data.lobby;
         Session.set('channel', lobby.name);
 
@@ -91,13 +108,15 @@ PlayBar = React.createClass({
                 console.log('click bot: ', error);
             }
             else {
-                console.log('****** clicking', playerId, room._id);
-                Meteor.call('scoreAndRematch', playerId, "bot", room);
+                Meteor.call('scoreAndRematch', playerId, "bot", room,
+                            that.handleWinnerPair);
             }
         });
+
     },
 
     clickHumanButton() {
+        var that = this;
         var lobby = this.data.lobby;
         Session.set('channel', lobby.name);
 
@@ -107,9 +126,12 @@ PlayBar = React.createClass({
                 console.log('click human: ', error);
             }
             else {
-                Meteor.call('scoreAndRematch', playerId, "human", room);
+                Meteor.call('scoreAndRematch', playerId, "human", room,
+                            that.handleWinnerPair);
             }
         });
+
+
     },
 
     buttonsDisabled() {
@@ -150,23 +172,29 @@ PlayBar = React.createClass({
                     />
                 </form>
 
-                <RaisedButton
-                    disabled={isDisabled}
-                    onClick={this.clickBotButton}
-                    style={{float: "left",
-                            margin: "10px",
-                           }}
-                    label="Bot"
-                    primary={true}/>
+                <div>
 
-                <RaisedButton
-                    disabled={isDisabled}
-                    onClick={this.clickHumanButton}
-                    style={{float: "right",
-                            margin: "10px",
-                           }}
-                    label="Human"
-                    primary={true}/>
+                    <RaisedButton
+                        disabled={isDisabled}
+                        onClick={this.clickBotButton}
+                        style={{float: "left",
+                                margin: "10px",
+                               }}
+                        label="Bot"
+                        primary={true}/>
+
+                    <div className="matchstatus"></div>
+
+                    <RaisedButton
+                        disabled={isDisabled}
+                        onClick={this.clickHumanButton}
+                        style={{float: "right",
+                                margin: "10px",
+                               }}
+                        label="Human"
+                        primary={true}/>
+
+                </div>
             </div>
         )
     }
