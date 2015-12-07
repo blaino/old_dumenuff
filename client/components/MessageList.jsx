@@ -37,7 +37,6 @@ MessageList = React.createClass({
 
     renderMessages() {
         return this.data.messages.map((message) => {
-            var line = this.playerName(message.user) + ': ' + message.text;
             return [
                 <ListItem key={ message._id }
                           primaryText={this.playerName(message.user)}

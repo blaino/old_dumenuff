@@ -4,7 +4,8 @@ Meteor.publish('messages', function (channel) {
 
 Meteor.publish("allUsernames", function () {
     return Meteor.users.find({}, {fields: {
-  	"username": 1
+  	"username": 1,
+        "_id": 1
     }});
 });
 
