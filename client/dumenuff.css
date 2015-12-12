@@ -3,17 +3,32 @@
   box-sizing: border-box;
 }
 
+
 body {
-  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  margin: 3em 0;
-  padding: 0;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 3em 0;
+    padding: 0;
 }
 
 .outer {
   margin: 0 auto;
   max-width: 480px;
+}
+
+.feedbackbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    max-width: 480px;
+}
+
+.playbar {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    max-width: 480px;
 }
 
 .title {
@@ -30,18 +45,6 @@ body {
   text-align: center;
 }
 
-.feedbackbar {
-    position: fixed;
-    width: 480px;
-    top: 0;
-}
-
-.playbar {
-    position: fixed;
-    width: 480px;
-    bottom: 0;
-}
-
 .playbarbuttons {
     visibility: visible;
 }
@@ -53,7 +56,6 @@ body {
 }
 
 .toolbartitle {
-    margin-left: 75px;
     font-weight: 900;
 }
 
@@ -72,63 +74,9 @@ body {
    text-align: center;
 }
 
-.details {
-  overflow: hidden;
-  margin-top: 1em;
-}
-
-.details .name {
-  display: inline-block;
-  font-size: 1.5em;
-  font-weight: 300;
-  line-height: 2.25rem;
-  padding-left: 1.25rem;
-  vertical-align: middle;
-}
-
-.details .inc {
-  border-radius: 3em;
-  border: #eb5f3a 1px solid;
-  background: transparent;
-  color: #eb5f3a;
-  cursor: pointer;
-  float: right;
-  font-family: 'Source Sans Pro' ,'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  line-height: 1;
-  margin: 0;
-  outline: none;
-  padding: 10px 30px;
-  transition: all 200ms ease-in;
-}
-
-.inc:hover {
-  background: #eb5f3a;
-  color: #fff;
-}
-
-.inc:active {
-  box-shadow: rgba(0,0,0,.3) 0 1px 3px 0 inset;
-}
-
 .playpage {
     margin: 0 auto;
     position: relative;
-    width: 600px;
-    height: 100%;
-}
-
-.messages {
-    position: absolute;
-    top: 20px;
-    bottom: 400px;
-}
-
-.message {
-  color: #aaa;
-  line-height: 2.25rem;
-  text-align: center;
-  margin-top: 1em;
 }
 
 .messageLabel {
@@ -137,28 +85,9 @@ body {
   padding: 10px;
 }
 
-@media (max-width: 500px) {
-  .details, .message {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    background-color: #fafafa;
-    width: 100%;
-    padding: 12px 15px;
-    border-top: 1px solid #ccc;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .details .name {
-    font-size: 1.2em;
-    padding-left: 0;
-  }
-
-  .details .inc {
-    padding: 10px 20px;
-  }
-
-  body {
-    margin: 2em 0 4em 0;
-  }
+@media (max-width: 400px) {
+    body {
+        margin: 2em 0 4em 0;
+        font-size: 10px;
+    }
 }
