@@ -94,7 +94,7 @@ PlayBar = React.createClass({
         $('.matchstatus').text(message);
         setTimeout(function () {
             $('.matchstatus').text("");
-        }, 2000);
+        }, 4000);
     },
 
     clickBotButton() {
