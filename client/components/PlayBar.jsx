@@ -133,32 +133,20 @@ PlayBar = React.createClass({
 
     },
 
-    buttonsDisabled() {
+    playbarDisabled() {
         if (this.data.sessionChannel == 'lobby') {
             return true;
-        }
-
-        var channel = this.data.channel;
-        if (channel) {
-            var channelName = channel.name;
-            var room = this.data.rooms.find(x => x._id == channelName);
-            if (room) {
-                var minChatTime = Meteor.settings.public.minChatTime * 1000;
-                if ((Date.now() - room.liveTime) < minChatTime) {
-                    return true;
-                }
-            }
         }
 
         return false;
     },
 
     render() {
-        var isDisabled = this.buttonsDisabled();
+        var isDisabled = this.playbarDisabled();
         if (isDisabled) {
-            $('.playbarbuttons').css('visibility', 'hidden');
+            $('.playbar').css('visibility', 'hidden');
         } else {
-            $('.playbarbuttons').css('visibility', 'visible');
+            $('.playbar').css('visibility', 'visible');
         }
 
         return (
