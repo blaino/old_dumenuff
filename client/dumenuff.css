@@ -1,27 +1,44 @@
-* {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-
 body {
     font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 16px;
     font-weight: normal;
-    margin: 3em 0;
+    margin: 0;
     padding: 0;
+    height: 100%;
 }
 
 .outer {
-  margin: 0 auto;
-  max-width: 480px;
+    margin: 0 auto;
+    max-width: 480px;
+}
+
+.playpage {
 }
 
 .feedbackbar {
-    position: fixed;
-    width: 100%;
-    top: 0;
+
+}
+
+.toolbartitle {
+    font-weight: 900;
+}
+
+.score {
+
+}
+
+.messages {
+    position: absolute;
     max-width: 480px;
+    width: 100%;
+    top: 7%;
+    bottom: 13%
+}
+
+.messageLabel {
+  font-size: .875em;
+  color: #999;
+  padding: 10px;
 }
 
 .playbar {
@@ -52,14 +69,6 @@ body {
     margin-top: 17px;
 }
 
-.toolbartitle {
-    font-weight: 900;
-}
-
-.score {
-
-}
-
 .signin {
     width: 50%;
     margin: 18px auto;
@@ -71,20 +80,10 @@ body {
    text-align: center;
 }
 
-.playpage {
-    margin: 0 auto;
-    position: relative;
-}
-
-.messageLabel {
-  font-size: .875em;
-  color: #999;
-  padding: 10px;
-}
-
-@media (max-width: 400px) {
-    body {
-        margin: 2em 0 4em 0;
-        font-size: 12px;
-    }
+.feedbackbox {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: blue;
 }
