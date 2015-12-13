@@ -1,16 +1,7 @@
-FeedbackBar = React.createClass({
+Marquee = React.createClass({
 
     propTypes: {
         scores: React.PropTypes.array.isRequired,
-    },
-
-    thisPlayersScore() {
-        var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
-        var score = 0;
-        if (playerScore) {
-            score = playerScore.score;
-        }
-        return score;
     },
 
     lastRound() {
@@ -25,7 +16,7 @@ FeedbackBar = React.createClass({
                 } else {
                     lastRoundArr[1] = "You fooled " + playerScore.opponent + ". +1";
                 }
-            } else {
+            } else if (playerScore.result == "wrong") {
                 lastRoundArr[0] = "Wrong!";
                 if (playerScore.opponent == "bot") {
                     lastRoundArr[1] = "A dumb bot fooled you. -2";
@@ -38,20 +29,19 @@ FeedbackBar = React.createClass({
     },
 
     render() {
-        var score = this.thisPlayersScore();
-
         var lastRoundArr = this.lastRound();
 
+        {/*
+        $('.marqueetext').css('visibility', 'visible');
+        setTimeout(function () {
+            $('.marqueetext').css('visibility', 'hidden');
+        }, 4000);
+        */}
+
         return (
-            <div className="feedbackbar">
-                <div className="scorebox">
-                    <div className="subtitle">Score</div>
-                    <div className="scoretext">{score}</div>
-                </div>
-
-                <Marquee scores={this.props.scores}/>
-
-                <TimeBox/>
+            <div className="marquee">
+                <div className="marqueetext">{lastRoundArr[0]}</div>
+                <div className="marqueetext">{lastRoundArr[1]}</div>
             </div>
         );
     }
