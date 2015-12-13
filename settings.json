@@ -1,7 +1,7 @@
 {
     "public": {
         "readyTime": 1,
-        "gameTime": 3000,
+        "gameTime": 300,
         "numPlayers": 2,
         "percentBot": 50,
         "threshold": 2,

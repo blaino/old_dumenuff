@@ -89,14 +89,6 @@ PlayBar = React.createClass({
         }
     },
 
-    handleWinnerPair(error, winnerPair) {
-        var message = this.getStatusMessage(winnerPair[0]);
-        $('.matchstatus').text(message);
-        setTimeout(function () {
-            $('.matchstatus').text("");
-        }, 4000);
-    },
-
     clickBotButton() {
         var that = this;
         var lobby = this.data.lobby;
@@ -108,8 +100,7 @@ PlayBar = React.createClass({
                 console.log('click bot: ', error);
             }
             else {
-                Meteor.call('scoreAndRematch', playerId, "bot", room,
-                            that.handleWinnerPair);
+                Meteor.call('scoreAndRematch', playerId, "bot", room);
             }
         });
     },
@@ -168,8 +159,6 @@ PlayBar = React.createClass({
                                }}
                         label="Bot"
                         primary={true}/>
-
-                    <div className="matchstatus"></div>
 
                     <RaisedButton
                         onClick={this.clickHumanButton}

@@ -4,6 +4,22 @@ Marquee = React.createClass({
         scores: React.PropTypes.array.isRequired,
     },
 
+    getInitialState() {
+        return {
+            score: null,
+            justFinished: false
+        };
+    },
+
+    componentWillUpdate() {
+        var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
+
+        if (playerScore.score !== this.state.score) {
+            this.setState({score: playerScore.score});
+            this.setState({justFinished: true});
+        }
+    },
+
     lastRound() {
         var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
         var lastRoundArr = ["", ""];
@@ -31,12 +47,14 @@ Marquee = React.createClass({
     render() {
         var lastRoundArr = this.lastRound();
 
-        {/*
-        $('.marqueetext').css('visibility', 'visible');
-        setTimeout(function () {
-            $('.marqueetext').css('visibility', 'hidden');
-        }, 4000);
-        */}
+        if (this.state.justFinished) {
+            $('.marqueetext').css('visibility', 'visible');
+            this.setState({justFinished: false});
+
+            setTimeout(function () {
+                $('.marqueetext').css('visibility', 'hidden');
+            }, 4000);
+        }
 
         return (
             <div className="marquee">
