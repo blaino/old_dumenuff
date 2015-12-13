@@ -162,7 +162,6 @@ PlayBar = React.createClass({
                 <div className="playbarbuttons">
 
                     <RaisedButton
-                        /* disabled={isDisabled} */
                         onClick={this.clickBotButton}
                         style={{float: "left",
                                 margin: "10px",
@@ -173,7 +172,6 @@ PlayBar = React.createClass({
                     <div className="matchstatus"></div>
 
                     <RaisedButton
-                        /* disabled={isDisabled} */
                         onClick={this.clickHumanButton}
                         style={{float: "right",
                                 margin: "10px",

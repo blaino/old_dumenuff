@@ -23,7 +23,7 @@ MessageList = React.createClass({
         Meteor.subscribe('messages', Session.get('channel'));
         return {
             messages: Messages.find({}).fetch(),
-            userId: Meteor.userId(),
+            userId: Meteor.userId()
         }
     },
 

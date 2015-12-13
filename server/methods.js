@@ -29,28 +29,29 @@ Meteor.methods({
     },
 
     updateScore: function (winnerId, loserId) {
-        if (winnerId != "bot") {
-            var winnerScore = Scores.findOne({player: winnerId});
+        var winnerName;
+        var loserName;
 
-            if (winnerScore) {
-                // console.log('updating winner');
-                Scores.update({player: winnerId}, {$inc: {score: 1}});
+        if (winnerId != "bot") {
+            if (loserId != "bot") {
+                loserName = Meteor.users.findOne({_id: loserId}).username;
             } else {
-                // console.log('adding winner to Score with score 1');
-                Scores.insert({player: winnerId, score: 1});
-            };
+                loserName = "bot";
+            }
+            Scores.update({player: winnerId},
+                          {$inc: {score: 1},
+                           $set: {result: "right", opponent: loserName}});
         };
 
         if (loserId != "bot") {
-            var loserScore = Scores.findOne({player: loserId});
-
-            if (loserScore) {
-                // console.log('updating loser');
-                Scores.update({player: loserId}, {$inc: {score: -2}});
+            if (winnerId != "bot") {
+                winnerName = Meteor.users.findOne({_id: winnerId}).username;
             } else {
-                // console.log('adding loser to Score with score -2');
-                Scores.insert({player: loserId, score: -2});
-            };
+                winnerName = "bot";
+            }
+            Scores.update({player: loserId},
+                          {$inc: {score: -2},
+                           $set: {result: "wrong", opponent: winnerName}});
         };
     },
 
@@ -59,6 +60,7 @@ Meteor.methods({
         if (typeof alreadyWaiting == 'undefined') {
             Waiting.insert({player: playerId, timeEntered: Date.now()});
             Game.update({}, {$inc: {numReady: 1}});
+            Scores.insert({player: playerId, score: 0, result: "", opponent: ""});
         }
     },
 

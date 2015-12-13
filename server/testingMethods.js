@@ -136,8 +136,7 @@ Meteor.methods({
     },
 
     endGame: function () {
-        Game.update({}, {$set: {state: "Ended"}}); // Maybe add winner: username?
-        // Determine winner, sort and display results or something
+        Game.update({}, {$set: {state: "Ended"}});
 
         // This should get blown away when a new one starts
         // Rooms.remove({});
