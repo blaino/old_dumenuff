@@ -48,11 +48,20 @@ Marquee = React.createClass({
         var lastRoundArr = this.lastRound();
 
         if (this.state.justFinished) {
+            var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
+
+            if (playerScore.result == "right") {
+                $('.feedbackbar').css('background-color', '#6C4');
+            } else if (playerScore.result == "wrong") {
+                $('.feedbackbar').css('background-color', 'red');
+            }
+
             $('.marqueetext').css('visibility', 'visible');
             this.setState({justFinished: false});
 
             setTimeout(function () {
                 $('.marqueetext').css('visibility', 'hidden');
+                $('.feedbackbar').css('background-color', '#DDD');
             }, 4000);
         }
 
