@@ -2,10 +2,6 @@ const {
     Colors,
     RaisedButton,
     TextField,
-    Toolbar,
-    ToolbarGroup,
-    ToolbarSeparator,
-    ToolbarTitle
 } = mui;
 
 const ThemeManager = new mui.Styles.ThemeManager();

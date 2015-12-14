@@ -86,6 +86,20 @@ body {
     visibility: hidden;
 }
 
+.waitingbar {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    max-width: 480px;
+    visibility: hidden;
+}
+
+.waitingbartext {
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
 .title {
   font-size: 3.0em;
   font-weight: 600;

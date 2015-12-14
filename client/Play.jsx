@@ -28,6 +28,8 @@ Play = React.createClass({
                 <MessageList />
 
                 <PlayBar />
+
+                <WaitingBar />
             </div>
         );
     }
