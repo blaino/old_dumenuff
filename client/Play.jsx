@@ -5,7 +5,7 @@ Play = React.createClass({
         Meteor.subscribe('scores');
         return {
             userId: Meteor.userId(),
-            scores: Scores.find({}).fetch(),
+            score: Scores.findOne({player: Meteor.userId()}),
         }
     },
 
@@ -23,7 +23,7 @@ Play = React.createClass({
 
         return (
             <div className="playpage">
-                <FeedbackBar scores={this.data.scores} />
+                <FeedbackBar score={this.data.score} />
 
                 <MessageList />
 

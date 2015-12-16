@@ -1,20 +1,11 @@
 FeedbackBar = React.createClass({
 
     propTypes: {
-        scores: React.PropTypes.array.isRequired,
-    },
-
-    thisPlayersScore() {
-        var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
-        var score = 0;
-        if (playerScore) {
-            score = playerScore.score;
-        }
-        return score;
+        score: React.PropTypes.object.isRequired,
     },
 
     render() {
-        var score = this.thisPlayersScore();
+        var score = this.props.score ? this.props.score.score : 0;
 
         return (
             <div className="feedbackbar">
@@ -22,10 +13,8 @@ FeedbackBar = React.createClass({
                     <div className="subtitle">Score</div>
                     <div className="scoretext">{score}</div>
                 </div>
-
-                <Marquee scores={this.props.scores}/>
-
-                <TimeBox/>
+                <Marquee score={this.props.score}/>
+                <TimeBox />
             </div>
         );
     }

@@ -1,27 +1,15 @@
 Marquee = React.createClass({
 
     propTypes: {
-        scores: React.PropTypes.array.isRequired,
+        score: React.PropTypes.object.isRequired,
     },
 
-    getInitialState() {
-        return {
-            score: null,
-            justFinished: false
-        };
-    },
-
-    componentWillUpdate() {
-        var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
-
-        if (playerScore.score !== this.state.score) {
-            this.setState({score: playerScore.score});
-            this.setState({justFinished: true});
-        }
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.score !== this.props.score;
     },
 
     lastRound() {
-        var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
+        var playerScore = this.props.score;
         var lastRoundArr = ["", ""];
 
         if (playerScore) {
@@ -46,24 +34,20 @@ Marquee = React.createClass({
 
     render() {
         var lastRoundArr = this.lastRound();
+        var playerScore = this.props.score;
 
-        if (this.state.justFinished) {
-            var playerScore = this.props.scores.find(x => x.player == Meteor.userId());
-
-            if (playerScore.result == "right") {
-                $('.feedbackbar').css('background-color', '#6C4');
-            } else if (playerScore.result == "wrong") {
-                $('.feedbackbar').css('background-color', 'red');
-            }
-
-            $('.marqueetext').css('visibility', 'visible');
-            this.setState({justFinished: false});
-
-            setTimeout(function () {
-                $('.marqueetext').css('visibility', 'hidden');
-                $('.feedbackbar').css('background-color', '#DDD');
-            }, 4000);
+        if (playerScore.result == "right") {
+            $('.feedbackbar').css('background-color', '#6C4');
+        } else if (playerScore.result == "wrong") {
+            $('.feedbackbar').css('background-color', 'red');
         }
+
+        $('.marqueetext').css('visibility', 'visible');
+
+        setTimeout(function () {
+            $('.marqueetext').css('visibility', 'hidden');
+            $('.feedbackbar').css('background-color', '#DDD');
+        }, 4000);
 
         return (
             <div className="marquee">
