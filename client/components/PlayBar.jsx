@@ -7,21 +7,9 @@ const {
 const ThemeManager = new mui.Styles.ThemeManager();
 
 PlayBar = React.createClass({
-    mixins: [ReactMeteorData],
-
-    getMeteorData() {
-        Meteor.subscribe('game');
-        Meteor.subscribe('channels');
-        Meteor.subscribe('rooms');
-
-        return {
-            lobby: Channels.findOne({name: 'lobby'}),
-            game: Game.findOne({}),
-            channel: Channels.findOne({name: Session.get('channel')}),
-            rooms: Rooms.find({}).fetch(),
-            userId: Meteor.userId(),
-            sessionChannel: Session.get('channel'),
-        }
+    propTypes: {
+        userId: React.PropTypes.string.isRequired,
+        sessionChannel: React.PropTypes.string.isRequired,
     },
 
     childContextTypes: {
@@ -40,7 +28,7 @@ PlayBar = React.createClass({
 
         var messageText = this.refs.textInput.getValue();
         this.refs.textInput.setValue("");
-        var userId = this.data.userId;
+        var userId = this.props.userId;
 
         Meteor.call('findRoom', userId, function (error, room) {
             if (error) {
@@ -77,20 +65,11 @@ PlayBar = React.createClass({
         });
     },
 
-    getStatusMessage(winnerId) {
-        if (winnerId == this.data.userId) {
-            return "Right!";
-        } else {
-            return "Wrong!";
-        }
-    },
-
     clickBotButton() {
         var that = this;
-        var lobby = this.data.lobby;
-        Session.set('channel', lobby.name);
+        Session.set('channel', 'lobby');
 
-        var playerId = this.data.userId;
+        var playerId = this.props.userId;
         var room = Meteor.call('findRoom', playerId, function (error, room) {
             if (error) {
                 console.log('click bot: ', error);
@@ -103,10 +82,9 @@ PlayBar = React.createClass({
 
     clickHumanButton() {
         var that = this;
-        var lobby = this.data.lobby;
-        Session.set('channel', lobby.name);
+        Session.set('channel', 'lobby');
 
-        var playerId = this.data.userId;
+        var playerId = this.props.userId;
         var room = Meteor.call('findRoom', playerId, function (error, room) {
             if (error) {
                 console.log('click human: ', error);
@@ -116,20 +94,11 @@ PlayBar = React.createClass({
                             that.handleWinnerPair);
             }
         });
-
-
-    },
-
-    playbarDisabled() {
-        if (this.data.sessionChannel == 'lobby') {
-            return true;
-        }
-
-        return false;
     },
 
     render() {
-        var isDisabled = this.playbarDisabled();
+        var isDisabled = (this.props.sessionChannel == 'lobby') ? true : false;
+
         if (isDisabled) {
             $('.playbar').css('visibility', 'hidden');
         } else {
@@ -168,4 +137,4 @@ PlayBar = React.createClass({
             </div>
         )
     }
-});
+})

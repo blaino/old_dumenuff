@@ -3,23 +3,24 @@ Play = React.createClass({
 
     getMeteorData() {
         Meteor.subscribe('scores');
+        Meteor.subscribe('rooms');
         return {
             userId: Meteor.userId(),
             score: Scores.findOne({player: Meteor.userId()}),
+            sessionChannel: Session.get('channel'),
+            room: Rooms.findOne({ $or: [ {player1: Meteor.userId()}, {player2: Meteor.userId()} ]})
         }
     },
 
     render() {
-
-        Meteor.call('findRoom', this.data.userId, function (error, room) {
-            if (error) {
-                /* console.log('Cannot find room for: ', this.data.userId); */
-                Session.set('channel', 'lobby');
-            } else {
-                /* console.log('Game starting setting room to: ', room._id); */
-                Session.set('channel', room._id);
-            };
-        });
+        if (this.data.room) {
+            var room = this.data.room;
+            console.log('Game starting setting room to: ', room._id);
+            Session.set('channel', room._id);
+        } else {
+            console.log('Cannot find room for: ', this.data.userId);
+            Session.set('channel', 'lobby');
+        }
 
         return (
             <div className="playpage">
@@ -27,9 +28,10 @@ Play = React.createClass({
 
                 <MessageList />
 
-                <PlayBar />
+                <PlayBar sessionChannel={this.data.sessionChannel}
+                         userId={this.data.userId}/>
 
-                <WaitingBar />
+                <WaitingBar sessionChannel={this.data.sessionChannel}/>
             </div>
         );
     }

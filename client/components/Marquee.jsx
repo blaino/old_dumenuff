@@ -5,7 +5,7 @@ Marquee = React.createClass({
     },
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.score !== this.props.score;
+        return nextProps.score.score !== this.props.score.score;
     },
 
     lastRound() {

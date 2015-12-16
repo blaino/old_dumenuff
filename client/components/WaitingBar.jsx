@@ -1,17 +1,12 @@
 WaitingBar = React.createClass({
-    mixins: [ReactMeteorData],
-
-    getMeteorData() {
-        return {
-            sessionChannel: Session.get('channel'),
-        }
+    propTypes: {
+        sessionChannel: React.PropTypes.string.isRequired,
     },
 
     render() {
         var that = this;
         setTimeout(function () {
-            if (that.data.sessionChannel == 'lobby') {
-
+            if (that.props.sessionChannel == 'lobby') {
                 $('.waitingbar').css('visibility', 'visible');
 
             } else {
