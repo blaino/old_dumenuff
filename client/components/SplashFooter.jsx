@@ -73,7 +73,7 @@ SplashFooter = React.createClass({
 
     clickJoinButton: function () {
         var user = this.data.userId;
-        console.log('Joining user', user);
+
         if (user) {
             Meteor.call('addPlayer', user);
             Meteor.call('checkReady', function (error, isReady) {

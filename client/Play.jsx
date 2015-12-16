@@ -15,10 +15,8 @@ Play = React.createClass({
     render() {
         if (this.data.room) {
             var room = this.data.room;
-            console.log('Game starting setting room to: ', room._id);
             Session.set('channel', room._id);
         } else {
-            console.log('Cannot find room for: ', this.data.userId);
             Session.set('channel', 'lobby');
         }
 
