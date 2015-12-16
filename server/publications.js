@@ -28,3 +28,7 @@ Meteor.publish('game', function () {
 Meteor.publish('waiting', function () {
     return Waiting.find();
 });
+
+Meteor.publish('time', function () {
+    return Time.find();
+});

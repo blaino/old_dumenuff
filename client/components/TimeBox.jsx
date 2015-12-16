@@ -2,23 +2,23 @@ TimeBox = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData() {
-        Meteor.subscribe('game');
+        Meteor.subscribe('time');
         return {
-            game: Game.findOne({}),
+            time: Time.findOne({}),
         }
     },
 
     render() {
-        var time = "0";
-        var game = this.data.game;
-        if (game) {
-            time = game.gameTime;
+        var gameTime = "0";
+        var time = this.data.time;
+        if (time) {
+            gameTime = time.gameTime;
         }
 
         return (
             <div className="timebox">
                 <div className="timetext">Time</div>
-                <div className="timetext">{time}s</div>
+                <div className="timetext">{gameTime}s</div>
             </div>
         );
     }

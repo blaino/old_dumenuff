@@ -7,6 +7,7 @@ Meteor.methods({
         Scores.remove({});
         Waiting.remove({});
         Game.remove({});
+        Time.remove({});
 
         Channels.insert({name: "lobby"});
     },
@@ -86,15 +87,17 @@ Meteor.methods({
     // Called on startup
     newGame: function (readyTime, gameTime, numPlayers, percentBot) {
         var oldGame = Game.findOne({});
+        var oldTime = Time.findOne({});
         Game.insert({state: "Waiting",
                      readyTime: readyTime,
-                     gameTime: gameTime,
                      numPlayers: numPlayers,
                      percentBot: percentBot,
                      numReady: 0,
                      threshold: Meteor.settings.public.threshold,
                      shufflePause: Meteor.settings.public.shufflePause});
+        Time.insert({gameTime: gameTime});
         Game.remove(oldGame);
+        Time.remove(oldTime);
     },
 
     readyGame: function () {
@@ -124,9 +127,9 @@ Meteor.methods({
         Meteor.call('matchPlayers', percentBot, threshold, shufflePause);
 
         function decGameTime () {
-            Game.update({}, {$inc: {gameTime: -1}});
-            var game = Game.findOne({});
-            if (game.gameTime <= 0) {
+            Time.update({}, {$inc: {gameTime: -1}});
+            var time = Time.findOne({});
+            if (time.gameTime <= 0) {
                 Meteor.clearInterval(timerId);
                 Meteor.call('endGame');
             }

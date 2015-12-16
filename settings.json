@@ -2,7 +2,7 @@
     "public": {
         "readyTime": 5,
         "gameTime": 300,
-        "numPlayers": 5,
+        "numPlayers": 2,
         "percentBot": 50,
         "threshold": 2,
         "shufflePause": 6000,
