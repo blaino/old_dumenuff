@@ -25,7 +25,7 @@ Marquee = React.createClass({
                 if (playerScore.opponent == "bot") {
                     lastRoundArr[1] = "A dumb bot fooled you. -2";
                 } else {
-                    lastRoundArr[1] = playerScore.opponent + " fooled you. -2";
+                    lastRoundArr[1] = playerScore.opponent + " knows you're not a bot. -2";
                 }
             }
         }
