@@ -11,7 +11,7 @@ Meteor.methods({
 
         var path = Npm.require('path');
         var basepath = path.resolve();
-        path = basepath + "/assets/app/brain-aiden";
+        path = basepath + "/assets/app/brain-eliza";
 
         var reply = Async.runSync(function (done) {
             rs.loadDirectory(
