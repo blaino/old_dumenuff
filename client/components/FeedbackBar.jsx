@@ -10,7 +10,7 @@ FeedbackBar = React.createClass({
         return (
             <div className="feedbackbar">
                 <div className="scorebox">
-                    <div className="subtitle">Score</div>
+                    <div className="scoreheading">Score</div>
                     <div className="scoretext">{score}</div>
                 </div>
                 <Marquee score={this.props.score}/>
