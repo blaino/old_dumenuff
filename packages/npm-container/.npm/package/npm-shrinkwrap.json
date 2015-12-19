@@ -218,7 +218,7 @@
               }
             },
             "ua-parser-js": {
-              "version": "0.7.9"
+              "version": "0.7.10"
             },
             "whatwg-fetch": {
               "version": "0.9.0"
