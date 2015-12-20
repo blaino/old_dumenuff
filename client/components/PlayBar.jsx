@@ -9,7 +9,7 @@ const ThemeManager = new mui.Styles.ThemeManager();
 PlayBar = React.createClass({
     propTypes: {
         userId: React.PropTypes.string.isRequired,
-        sessionChannel: React.PropTypes.string.isRequired,
+        sessionChannel: React.PropTypes.string,
     },
 
     childContextTypes: {

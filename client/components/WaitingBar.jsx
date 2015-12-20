@@ -1,6 +1,6 @@
 WaitingBar = React.createClass({
     propTypes: {
-        sessionChannel: React.PropTypes.string.isRequired,
+        sessionChannel: React.PropTypes.string,
     },
 
     render() {
