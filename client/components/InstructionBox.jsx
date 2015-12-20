@@ -65,10 +65,10 @@ InstructionBox = React.createClass({
         return [
             <CardTitle key="{0}"
                        title="Instructions"/>,
-            <CardText>
+            <CardText key="{1}">
                 Chat with your opponent. If you think your opponent is a
                 bot click the bot button. If you think your oppoent is a
-                human cilck the human button. You get 1 point if you're
+                human click the human button. You get 1 point if you're
                 right; you'll lose 2 if you're wrong. If you fool your
                 opponent, you get 2 points.
             </CardText>
