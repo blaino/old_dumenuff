@@ -187,5 +187,22 @@ Meteor.methods({
         var shufflePause = game.shufflePause;
 
         Meteor.call('matchPlayers', percentBot, threshold, shufflePause);
+    },
+
+    greeting: function (channel, user) {
+        if (channel != 'lobby') {
+            if (Math.random() < 0.50) {
+                var room = Meteor.call('findRoom', user);
+                if (room) {
+                    var otherPlayer = Meteor.call('getOtherPlayer', user, room);
+                    if (otherPlayer == 'bot') {
+                        var result = Meteor.call('reply', 'xxxgreetingxxx');
+                        Meteor.call('newMessage',
+                                    Meteor.users.findOne({username: "player"}),
+                                    {text: result, channel: room._id});
+                    }
+                }
+            }
+        }
     }
 });
