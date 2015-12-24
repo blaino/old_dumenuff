@@ -34,6 +34,7 @@ Marquee = React.createClass({
 
     render() {
         var lastRoundArr = this.lastRound();
+        var text = lastRoundArr[0] + ' ' + lastRoundArr[1];
         var playerScore = this.props.score;
 
         if (playerScore.result == "right") {
@@ -51,8 +52,7 @@ Marquee = React.createClass({
 
         return (
             <div className="marquee">
-                <div className="marqueetext">{lastRoundArr[0]}</div>
-                <div className="marqueetext">{lastRoundArr[1]}</div>
+                <div className="marqueetext">{text}</div>
             </div>
         );
     }

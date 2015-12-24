@@ -57,7 +57,7 @@ MessageList = React.createClass({
             <div className="messages">
                 <div className="messageLabel">Your conversation:</div>
 
-                    {this.renderMessages()}
+                {this.renderMessages()}
 
             </div>
         )

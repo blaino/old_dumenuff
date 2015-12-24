@@ -74,7 +74,7 @@ body {
     max-width: 480px;
     width: 100%;
     top: 64px;
-    bottom: 13%;
+    bottom: 100px;
     overflow: scroll;
 }
 
@@ -127,15 +127,16 @@ body {
 }
 
 .splashFooter {
-   width: 50%;
    margin: 0 auto;
    text-align: center;
 }
 
 @media only screen and (max-width: 480px) {
     body { font-size: 12px; }
-    scoreheading { padding-top: 7px; }
+    .feedbackbar { height: 56px; }
 }
+
+
 
 /*
 @media only screen and (max-width: 480px) {
