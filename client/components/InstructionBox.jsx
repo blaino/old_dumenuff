@@ -48,7 +48,7 @@ InstructionBox = React.createClass({
                 <ListDivider/>
                 <ListItem key={1}
                           primaryText="Player"
-                          secondaryText="I know you are but what am i?"/>
+                          secondaryText="No."/>
                 <ListDivider/>
                 <ListItem key={2}
                           primaryText="You"
@@ -56,7 +56,7 @@ InstructionBox = React.createClass({
                 <ListDivider/>
                 <ListItem key={3}
                           primaryText="Player"
-                          secondaryText="I think you suck"/>
+                          secondaryText="I know you are but what am I?"/>
             </CardText>
         );
     },
